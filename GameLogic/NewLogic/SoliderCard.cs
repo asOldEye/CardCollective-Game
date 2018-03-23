@@ -39,7 +39,7 @@ namespace GameLogic
         /// <summary>
         /// Событие, вызывающееся при изменении силы атаки
         /// </summary>
-        public event GameEvent AttackChanged;
+        public event InGameEvent AttackChanged;
         #endregion
 
         #region IDestroyable realization
@@ -82,11 +82,11 @@ namespace GameLogic
         /// <summary>
         /// Событие, вызывающееся при смерти
         /// </summary>
-        public event GameEvent Death;
+        public event InGameEvent Death;
         /// <summary>
         /// Событие, вызывающееся при изменении количества здоровья
         /// </summary>
-        public event GameEvent HealthChanged;
+        public event InGameEvent HealthChanged;
         #endregion
 
         #region Loyality realization
@@ -110,7 +110,7 @@ namespace GameLogic
         /// <summary>
         /// Событие, вызывающееся при изменении количества здоровья
         /// </summary>
-        public event GameEvent LoyalityChanged;
+        public event InGameEvent LoyalityChanged;
         #endregion;
 
         private SoliderClass soliderClass;

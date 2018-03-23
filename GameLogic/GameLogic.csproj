@@ -34,14 +34,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="project.json" />
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logic\CasterSoliderCard.cs" />
     <Compile Include="NewLogic\Card.cs" />
     <Compile Include="NewLogic\Deck.cs" />
     <Compile Include="NewLogic\Enumerations.cs" />
-    <Compile Include="NewLogic\GameEvent.cs" />
+    <Compile Include="Logic\GameEvent.cs" />
     <Compile Include="NewLogic\IAttacker.cs" />
     <Compile Include="NewLogic\ICaster.cs" />
     <Compile Include="NewLogic\IDestroyable.cs" />

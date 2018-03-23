@@ -36,11 +36,11 @@
         /// <summary>
         /// Событие, вызывающееся при смерти
         /// </summary>
-        event GameEvent Death;
+        event InGameEvent Death;
 
         /// <summary>
         /// Событие, вызывающееся при изменении количества здоровья
         /// </summary>
-        event GameEvent HealthChanged;
+        event InGameEvent HealthChanged;
     }
 }

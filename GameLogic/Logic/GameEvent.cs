@@ -4,5 +4,5 @@
     {
 
     }
-    public delegate void GameEvent(object sender, GameEventArgs e);
+    public delegate void InGameEvent(object sender, GameEventArgs e);
 }

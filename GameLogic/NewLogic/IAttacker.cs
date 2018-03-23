@@ -27,6 +27,6 @@
         /// <summary>
         /// Событие, вызывающееся при изменении силы атаки
         /// </summary>
-        event GameEvent AttackChanged;
+        event InGameEvent AttackChanged;
     }
 }
