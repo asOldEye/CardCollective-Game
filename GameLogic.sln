@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2011
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic", "GameLogic\GameLogic.csproj", "{FF41A41D-5C90-4E11-95C0-C8A3D3D34FDC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF41A41D-5C90-4E11-95C0-C8A3D3D34FDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF41A41D-5C90-4E11-95C0-C8A3D3D34FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF41A41D-5C90-4E11-95C0-C8A3D3D34FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF41A41D-5C90-4E11-95C0-C8A3D3D34FDC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56CD6C60-D0E1-43ED-AA84-2139AB49ECE0}
+	EndGlobalSection
+EndGlobal
