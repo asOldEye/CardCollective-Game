@@ -9,18 +9,8 @@ namespace GameLogic
     /// <summary>
     /// Игровая сессия
     /// </summary>
-    public class Session<T> where T : ICollection<Player>
-    {
-        //private T players;
+    //public class Session<T> where T : ICollection<Player>
+    //{
 
-        //public Session(T players)
-        //{
-        //    if (players == null) throw new ArgumentNullException();
-
-        //    var n = players.GetType();
-
-        //    foreach (var f in players) if (f == null)
-        //            throw new ArgumentException("Empty player");
-        //}
-    }
+    //}
 }

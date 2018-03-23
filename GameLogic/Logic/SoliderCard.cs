@@ -6,9 +6,19 @@ namespace GameLogic
     /// <summary>
     /// Карта, представляющая существо
     /// </summary>
-    public class SoliderCard : Card, IDestroyable, IAttacker, IModified
+    public class SoliderCard : Card, IDestroyable, IAttacker, IModifiedDurable
     {
         #region IAttacker realization
+        private int powerMax = -1;
+        /// <summary>
+        /// Максимальная сила атаки
+        /// </summary>
+        public int PowerMax
+        {
+            get { return powerMax; }
+            protected set { if (value < 0) throw new ArgumentException(); }
+        }
+
         private int power = -1;
         /// <summary>
         /// Сила атаки
@@ -16,8 +26,14 @@ namespace GameLogic
         public int Power
         {
             get { return power; }
-            protected set { if (value < 0) value = 0; power = value; }
+            protected set
+            {
+                if (value < 0) value = 0;
+                if (value > powerMax) value = powerMax;
+                power = value;
+            }
         }
+
         /// <summary>
         /// Атака уничтожаемого объекта
         /// </summary>
@@ -28,6 +44,7 @@ namespace GameLogic
             if (target == null) throw new ArgumentException("Invalid target value");
             //TODO
         }
+
         /// <summary>
         /// Изменение здоровья объекта
         /// </summary>
@@ -36,22 +53,26 @@ namespace GameLogic
         {
             Power += delta;
         }
+
+#pragma warning disable CS0067 // The event 'SoliderCard.OnAttackChanged' is never used
         /// <summary>
         /// Событие, вызывающееся при изменении силы атаки
         /// </summary>
-        public event InGameEvent AttackChanged;
+        public event InGameEvent OnAttackChanged;
+#pragma warning restore CS0067 // The event 'SoliderCard.OnAttackChanged' is never used
         #endregion
 
         #region IDestroyable realization
         private int healthMax = -1;
         /// <summary>
-        /// Параметр здоровья карты
+        /// Максимальное здоровье карты
         /// </summary>
         public int HealthMax
         {
             get { return health; }
             protected set { if (value < 0) throw new ArgumentException("Wrong health value"); health = value; }
         }
+
         private int health = -1;
         /// <summary>
         /// Параметр здоровья карты
@@ -59,18 +80,14 @@ namespace GameLogic
         public int Health
         {
             get { return health; }
-            protected set { if (value < 0) value = 0; health = value; }
+            protected set
+            {
+                if (value < 0) value = 0;
+                if (value > healthMax) value = healthMax;
+                health = value;
+            }
         }
-        /// <summary>
-        /// Получение урона
-        /// </summary>
-        /// <param name="damage">Получаемый урон</param>
-        /// <returns></returns>
-        public void TakeDamage(int damage)
-        {
-            if (damage < 0) throw new ArgumentException("Invalid damage value");
-            //TODO
-        }
+
         /// <summary>
         /// Изменение здоровья объекта
         /// </summary>
@@ -79,14 +96,20 @@ namespace GameLogic
         {
             //TODO
         }
+
+#pragma warning disable CS0067 // The event 'SoliderCard.OnDeath' is never used
         /// <summary>
         /// Событие, вызывающееся при смерти
         /// </summary>
-        public event InGameEvent Death;
+        public event InGameEvent OnDeath;
+#pragma warning restore CS0067 // The event 'SoliderCard.OnDeath' is never used
+
+#pragma warning disable CS0067 // The event 'SoliderCard.OnHealthChanged' is never used
         /// <summary>
         /// Событие, вызывающееся при изменении количества здоровья
         /// </summary>
-        public event InGameEvent HealthChanged;
+        public event InGameEvent OnHealthChanged;
+#pragma warning restore CS0067 // The event 'SoliderCard.OnHealthChanged' is never used
         #endregion
 
         #region Loyality realization
@@ -99,6 +122,7 @@ namespace GameLogic
             get { return loyality; }
             protected set { if (value < 0) value = 0; if (value > 100) value = 100; loyality = value; }
         }
+
         /// <summary>
         /// Изменение параметра лояльности
         /// </summary>
@@ -107,10 +131,13 @@ namespace GameLogic
         {
             Loyality += delta;
         }
+
+#pragma warning disable CS0067 // The event 'SoliderCard.OnLoyalityChanged' is never used
         /// <summary>
         /// Событие, вызывающееся при изменении количества здоровья
         /// </summary>
-        public event InGameEvent LoyalityChanged;
+        public event InGameEvent OnLoyalityChanged;
+#pragma warning restore CS0067 // The event 'SoliderCard.OnLoyalityChanged' is never used
         #endregion;
 
         private SoliderClass soliderClass;
@@ -177,14 +204,14 @@ namespace GameLogic
             }
             return baseSol;
         }
-        
+
         #region IModified realization
         List<Modifier> modifiers;
         /// <summary>
         /// Список модификаторов
         /// </summary>
         public List<Modifier> Modifiers
-        { 
+        {
             get { return modifiers; }
             protected set
             {
@@ -200,7 +227,12 @@ namespace GameLogic
         /// </summary>
         /// <param name="modifier">Модификатор</param>
         public void TakeModifier(Modifier modifier)
-        { Modifiers.Add(modifier); }
+        {
+            try
+            { Modifiers.Add(modifier); }
+            catch (Exception e)
+            { throw e; }
+        }
 
         /// <summary>
         /// Выполняет модификаторы, либо убирает их по истечении ходов

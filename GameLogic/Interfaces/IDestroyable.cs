@@ -22,12 +22,6 @@
         }
         
         /// <summary>
-        /// Получение урона объектом
-        /// </summary>
-        /// <param name="damage">Количество получаемых единиц урона</param>
-        void TakeDamage(int damage);
-
-        /// <summary>
         /// Изменение здоровья объекта
         /// </summary>
         /// <param name="health">Количество изменяемых единиц здоровья</param>
@@ -36,11 +30,11 @@
         /// <summary>
         /// Событие, вызывающееся при смерти
         /// </summary>
-        event InGameEvent Death;
+        event InGameEvent OnDeath;
 
         /// <summary>
         /// Событие, вызывающееся при изменении количества здоровья
         /// </summary>
-        event InGameEvent HealthChanged;
+        event InGameEvent OnHealthChanged;
     }
 }

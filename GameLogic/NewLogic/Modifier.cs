@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameLogic
 {
@@ -12,7 +8,7 @@ namespace GameLogic
     public class Modifier
     {
         //модифицируемый объект
-        object modified;
+        IModified modified;
 
         ModifierType type;
         /// <summary>
@@ -34,35 +30,7 @@ namespace GameLogic
         public Modifier(IModified modified, ModifierType type, int impact)
         {
             this.modified = modified ?? throw new ArgumentNullException();
-
-            switch(type)
-            {
-                case ModifierType.health:
-                    {
-                        if(!(modified is IDestroyable))
-                            throw new ArgumentException();
-                        break;
-                    }
-                case ModifierType.loyality:
-                    {
-                        if (!(modified is SoliderCard))
-                            throw new ArgumentException();
-                        break;
-                    }
-                case ModifierType.mana:
-                    {
-                        if (!(modified is ICaster))
-                            throw new ArgumentException();
-                        break;
-                    }
-                case ModifierType.power:
-                    {
-                        if (!(modified is IAttacker))
-                            throw new ArgumentException();
-                        break;
-                    }
-            }
-
+            
             this.type = type;
             Impact = impact;
         }
@@ -70,30 +38,26 @@ namespace GameLogic
         /// <summary>
         /// Воздействие на модифицируемый объект
         /// </summary>
-        public void Action()
+        public virtual void Action()
         {
             switch (type)
             {
                 case ModifierType.health:
-                    {
+                    if (modified is IDestroyable)
                         (modified as IDestroyable).DeltaHealth(impact);
-                        break;
-                    }
+                    break;
                 case ModifierType.loyality:
-                    {
+                    if (modified is SoliderCard)
                         (modified as SoliderCard).DeltaLoyality(impact);
-                        break;
-                    }
+                    break;
                 case ModifierType.mana:
-                    {
+                    if (modified is ICaster)
                         (modified as ICaster).DeltaMana(impact);
-                        break;
-                    }
+                    break;
                 case ModifierType.power:
-                    {
+                    if (modified is IAttacker)
                         (modified as IAttacker).DeltaPower(impact);
-                        break;
-                    }
+                    break;
             }
         }
     }

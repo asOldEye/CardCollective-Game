@@ -7,17 +7,17 @@ namespace GameLogic
     /// <summary>
     /// Колода карт
     /// </summary>
-    public struct Deck<T> : ICollection<T> where T : Card
+    public struct Deck<T> : IEnumerable where T : Card
     {
         //карты в колоде
         readonly List<T> cards;
-        
+
         /// <summary>
         /// Количество карт в колоде
         /// </summary>
         public int Count
         { get { return cards.Count; } }
-
+        
         /// <summary>
         /// Перемешивание колоды
         /// </summary>
@@ -58,7 +58,7 @@ namespace GameLogic
         }
 
         //конструктор для колоды карт
-        public Deck(List<T> cards = null)
+        public Deck(List<T> cards)
         {
             this.cards = new List<T>();
 
@@ -134,44 +134,10 @@ namespace GameLogic
             return cards.ToArray();
         }
 
-        #region ICollection<T> realization
-
-        public bool IsReadOnly => ((ICollection<T>)cards).IsReadOnly;
-
-        public void Add(T item)
+        //Реализация IEnumerable 
+        public IEnumerator GetEnumerator()
         {
-            cards.Add(item);
+            return ((IEnumerable)cards).GetEnumerator();
         }
-
-        public void Clear()
-        {
-            cards.Clear();
-        }
-
-        public bool Contains(T item)
-        {
-            return cards.Contains(item);
-        }
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            cards.CopyTo(array, arrayIndex);
-        }
-
-        public bool Remove(T item)
-        {
-            return cards.Remove(item);
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return ((ICollection<T>)cards).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((ICollection<T>)cards).GetEnumerator();
-        }
-        #endregion
     }
 }

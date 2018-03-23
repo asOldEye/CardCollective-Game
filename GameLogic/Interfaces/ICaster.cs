@@ -6,6 +6,12 @@
     interface ICaster
     {
         /// <summary>
+        /// Максимальное количество маны
+        /// </summary>
+        int ManaMax
+        { get; }
+
+        /// <summary>
         /// Количество маны
         /// </summary>
         int Mana
@@ -33,6 +39,6 @@
         /// <summary>
         /// Событие, вызывающееся при изменении силы атаки
         /// </summary>
-        event InGameEvent ManaChanged;
+        event InGameEvent OnManaChanged;
     }
 }

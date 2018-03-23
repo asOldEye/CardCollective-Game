@@ -6,6 +6,12 @@
     public interface IAttacker
     {
         /// <summary>
+        /// Максимальная сила атаки
+        /// </summary>
+        int PowerMax
+        { get; }
+
+        /// <summary>
         /// Сила атаки
         /// </summary>
         int Power
@@ -27,6 +33,6 @@
         /// <summary>
         /// Событие, вызывающееся при изменении силы атаки
         /// </summary>
-        event InGameEvent AttackChanged;
+        event InGameEvent OnAttackChanged;
     }
 }
