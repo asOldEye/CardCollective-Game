@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GameLogic
+﻿namespace GameLogic
 {
     /// <summary>
     /// Представляет создание заклинаний
@@ -14,6 +12,12 @@ namespace GameLogic
         { get; }
 
         /// <summary>
+        /// Изменение здоровья объекта
+        /// </summary>
+        /// <param name="health">Количество изменяемых единиц здоровья</param>
+        void DeltaMana(int delta);
+
+        /// <summary>
         /// Создать заклинание
         /// </summary>
         /// <param name="spell">Заклинание из списка доступных</param>
@@ -25,5 +29,10 @@ namespace GameLogic
         /// </summary>
         Deck<SpellCard> Spells
         { get; }
+
+        /// <summary>
+        /// Событие, вызывающееся при изменении силы атаки
+        /// </summary>
+        event GameEvent ManaChanged;
     }
 }

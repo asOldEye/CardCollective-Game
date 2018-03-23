@@ -39,14 +39,14 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Card.cs" />
-    <Compile Include="Deck.cs" />
-    <Compile Include="Enumerations.cs" />
-    <Compile Include="IAttacking.cs" />
-    <Compile Include="ICaster.cs" />
-    <Compile Include="IDestroyable.cs" />
-    <Compile Include="IModifiedObject.cs" />
-    <Compile Include="Logic\ISpell.cs" />
+    <Compile Include="NewLogic\Card.cs" />
+    <Compile Include="NewLogic\Deck.cs" />
+    <Compile Include="NewLogic\Enumerations.cs" />
+    <Compile Include="NewLogic\GameEvent.cs" />
+    <Compile Include="NewLogic\IAttacker.cs" />
+    <Compile Include="NewLogic\ICaster.cs" />
+    <Compile Include="NewLogic\IDestroyable.cs" />
+    <Compile Include="NewLogic\IModified.cs" />
     <Compile Include="Logic\Player.cs" />
     <Compile Include="Logic\Session.cs" />
     <Compile Include="Logic\SoliderCard.cs" />

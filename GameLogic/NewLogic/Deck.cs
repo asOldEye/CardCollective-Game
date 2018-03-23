@@ -103,7 +103,7 @@ namespace GameLogic
         /// Вытащить верхнюю карту из колоды
         /// </summary>
         /// <returns>Возвращает вытащенную карту</returns>
-        public Card PullCard()
+        public T PullCard()
         {
             if (cards.Count == 0)
                 throw new NullReferenceException("Empty or null deck");
