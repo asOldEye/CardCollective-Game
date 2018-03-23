@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace GameLogic
@@ -6,7 +7,7 @@ namespace GameLogic
     /// <summary>
     /// Колода карт
     /// </summary>
-    public struct Deck<T> where T : Card
+    public struct Deck<T> : ICollection<T> where T : Card
     {
         //карты в колоде
         readonly List<T> cards;
@@ -58,6 +59,17 @@ namespace GameLogic
 
         //конструктор для колоды карт
         public Deck(List<T> cards = null)
+        {
+            this.cards = new List<T>();
+
+            if (cards == null) return;
+
+            foreach (var card in cards)
+                if (card == null) throw new NullReferenceException("No valid cards in deck");
+
+            this.cards = new List<T>(cards);
+        }
+        public Deck(T[] cards)
         {
             this.cards = new List<T>();
 
@@ -121,5 +133,45 @@ namespace GameLogic
         {
             return cards.ToArray();
         }
+
+        #region ICollection<T> realization
+
+        public bool IsReadOnly => ((ICollection<T>)cards).IsReadOnly;
+
+        public void Add(T item)
+        {
+            cards.Add(item);
+        }
+
+        public void Clear()
+        {
+            cards.Clear();
+        }
+
+        public bool Contains(T item)
+        {
+            return cards.Contains(item);
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            cards.CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(T item)
+        {
+            return cards.Remove(item);
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return ((ICollection<T>)cards).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((ICollection<T>)cards).GetEnumerator();
+        }
+        #endregion
     }
 }

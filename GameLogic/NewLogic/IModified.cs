@@ -6,12 +6,12 @@ namespace GameLogic
     /// Объекты, на которые можно наложить долговременные модификаторы
     /// </summary>
     /// <typeparam name="T">Тип модификаторов</typeparam>
-    interface IModified
+    public interface IModified
     {
         /// <summary>
-        /// Очередь модификаторов и соотв. им оставшегося времени действия
+        /// Список модификаторов
         /// </summary>
-        Queue<Modifier> Modifiers { get; }
+        List<Modifier> Modifiers { get; }
 
         /// <summary>
         /// Добавление нового модификатора
@@ -23,7 +23,6 @@ namespace GameLogic
         /// <summary>
         /// Выполняет модификаторы, либо убирает их по истечении ходов
         /// </summary>
-        void TurnTick();
+        void TurnRun();
     }
-    
 }

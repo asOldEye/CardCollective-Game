@@ -6,6 +6,14 @@
     public interface IDestroyable
     {
         /// <summary>
+        /// Максимальное здоровье уничтожаемого объекта
+        /// </summary>
+        int HealthMax
+        {
+            get;
+        }
+
+        /// <summary>
         /// Здоровье уничтожаемого объекта
         /// </summary>
         int Health

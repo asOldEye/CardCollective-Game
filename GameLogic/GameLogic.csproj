@@ -34,7 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="project.json" />
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
@@ -49,9 +48,9 @@
     <Compile Include="NewLogic\IModified.cs" />
     <Compile Include="Logic\Player.cs" />
     <Compile Include="Logic\Session.cs" />
-    <Compile Include="Logic\SoliderCard.cs" />
+    <Compile Include="NewLogic\SoliderCard.cs" />
     <Compile Include="Logic\SpellCard.cs" />
-    <Compile Include="Modifier.cs" />
+    <Compile Include="NewLogic\Modifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

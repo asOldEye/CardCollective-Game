@@ -1,98 +1,195 @@
-﻿//using System;
-//using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections;
 
-//namespace GameLogic
-//{
-//    //игрок
-//    public class Player : IDestroyable, IAttacking, ICaster, IModifiedObject<Modifier>
-//    {
-//        //мана
-//        private int mana = -1;
-//        public int Mana
-//        {
-//            get { return mana; }
-//            set { if (value < 0) throw new ArgumentException("Wrong mana value"); mana = value; }
-//        }
+namespace GameLogic
+{
+    /// <summary>
+    /// Реализация игрока
+    /// </summary>
+    public class Player : IDestroyable, IAttacker, IModified, ICaster
+    {
+        #region IDestroyable realization
+        private int healthMax = -1;
+        /// <summary>
+        /// Параметр здоровья карты
+        /// </summary>
+        public int HealthMax
+        {
+            get { return health; }
+            protected set { if (value < 0) throw new ArgumentException("Wrong health value"); health = value; }
+        }
+        private int health = -1;
+        /// <summary>
+        /// Параметр здоровья карты
+        /// </summary>
+        public int Health
+        {
+            get { return health; }
+            protected set { if (value < 0) value = 0; health = value; }
+        }
+        /// <summary>
+        /// Получение урона
+        /// </summary>
+        /// <param name="damage">Получаемый урон</param>
+        /// <returns></returns>
+        public void TakeDamage(int damage)
+        {
+            if (damage < 0) throw new ArgumentException("Invalid damage value");
+            //TODO
+        }
+        /// <summary>
+        /// Изменение здоровья объекта
+        /// </summary>
+        /// <param name="health">Количество изменяемых единиц здоровья</param>
+        public void DeltaHealth(int delta)
+        {
+            //TODO
+        }
+        /// <summary>
+        /// Событие, вызывающееся при смерти
+        /// </summary>
+        public event GameEvent Death;
+        /// <summary>
+        /// Событие, вызывающееся при изменении количества здоровья
+        /// </summary>
+        public event GameEvent HealthChanged;
+        #endregion
 
-//        //атака
-//        private int power = -1;
-//        public int Power
-//        {
-//            get { return power; }
-//            set { if (value < 0) throw new ArgumentException("Wrong power value"); power = value; }
-//        }
+        #region IAttacker realization
+        private int power = -1;
+        /// <summary>
+        /// Сила атаки
+        /// </summary>
+        public int Power
+        {
+            get { return power; }
+            protected set { if (value < 0) value = 0; power = value; }
+        }
+        /// <summary>
+        /// Атака уничтожаемого объекта
+        /// </summary>
+        /// <param name="target">атакуемый объект</param>
+        /// <returns></returns>
+        public void Attack(IDestroyable target)
+        {
+            if (target == null) throw new ArgumentException("Invalid target value");
+            //TODO
+        }
+        /// <summary>
+        /// Изменение здоровья объекта
+        /// </summary>
+        /// <param name="health">Количество изменяемых единиц здоровья</param>
+        public void DeltaPower(int delta)
+        {
+            Power += delta;
+        }
+        /// <summary>
+        /// Событие, вызывающееся при изменении силы атаки
+        /// </summary>
+        public event GameEvent AttackChanged;
+        #endregion
 
-//        //метод для атаки
-//        public bool Attack(IDestroyable target)
-//        {
-//            if (target == null) throw new ArgumentException("Invalid target value");
-//            return false;
-//            //TODO
-//        }
+        #region IModified realization
+        List<Modifier> modifiers;
+        /// <summary>
+        /// Список модификаторов
+        /// </summary>
+        public List<Modifier> Modifiers
+        {
+            get { return modifiers; }
+            protected set
+            {
+                if (value == null) throw new ArgumentNullException();
+                foreach (var f in value)
+                    if (f == null) value.Remove(f);
+                modifiers = new List<Modifier>(value);
+            }
+        }
 
-//        //колода игрока
-//        private Deck<SoliderCard> playerDeck;
-//        public Deck<SoliderCard> PlayerDeck
-//        { get { return playerDeck; } }
+        /// <summary>
+        /// Добавление нового модификатора
+        /// </summary>
+        /// <param name="modifier">Модификатор</param>
+        public void TakeModifier(Modifier modifier)
+        { Modifiers.Add(modifier); }
 
-//        //конструктор игрока
-//        public Player(int mana, int power, int health, Deck<SoliderCard> deck)
-//        {
-//            try
-//            {
-//                Mana = mana;
-//                Power = power;
-//                Health = health;
-//                playerDeck = deck;
-//            }
-//            catch (Exception e) { throw e; }
-//        }
+        /// <summary>
+        /// Выполняет модификаторы, либо убирает их по истечении ходов
+        /// </summary>
+        public void TurnRun()
+        {
+            foreach (var f in modifiers)
+                f.Action();
+        }
+        #endregion
 
-//        //здоровье
-//        private int health = -1;
-//        public int Health
-//        {
-//            get { return health; }
-//            set { if (value < 0) throw new ArgumentException("Wrong health value"); health = value; }
-//        }
+        #region ICaster realization
+        int mana = -1;
+        /// <summary>
+        /// Количество маны
+        /// </summary>
+        public int Mana
+        {
+            get { return mana; }
+            protected set
+            {
+                if (value < 0) value = 0; mana = value;
+            }
+        }
+        /// <summary>
+        /// Изменение здоровья объекта
+        /// </summary>
+        /// <param name="health">Количество изменяемых единиц здоровья</param>
+        public void DeltaMana(int delta)
+        {
+            Mana += delta;
+        }
 
-//        //получение урона
-//        public bool TakeDamage(int damage)
-//        {
-//            if (damage < 0) throw new ArgumentException("Invalid damage value");
-//            return false;
-//            //TODO
-//        }
+        /// <summary>
+        /// Создать заклинание
+        /// </summary>
+        /// <param name="spell">Заклинание из списка доступных</param>
+        /// <param name="target">Цель атаки</param>
+        public void Cast(SpellCard spell, IDestroyable target = null)
+        {
 
-//        //лечение
-//        public void Cure(int health)
-//        {
-//            if (health < 0) throw new ArgumentException("Invalid health value");
+        }
 
-//            //TODO
-//        }
-        
-//        Deck<SpellCard> spells;
-//        public Deck<SpellCard> Spells
-//        { get { return spells; } }
+        Deck<SpellCard> spells;
+        /// <summary>
+        /// Список доступных заклинаний
+        /// </summary>
+        public Deck<SpellCard> Spells
+        {
+            get { return spells; }
+            protected set
+            {
+                foreach (var f in value)
+                    if (f == null) value.Remove(f);
+                spells = value;
+            }
+        }
 
-//        public void Cast(SpellCard spell, IDestroyable target = null)
-//        {
-//            //TODO
-//        }
+        /// <summary>
+        /// Событие, вызывающееся при изменении силы атаки
+        /// </summary>
+        public event GameEvent ManaChanged;
+        #endregion
 
-//        Queue<KeyValuePair<Modifier, int>> modifiers;
-//        public Queue<KeyValuePair<Modifier, int>> Modifiers
-//        { get { return modifiers; } }
+        //констркутор
+        public Player(int id, int cost, Rarity rarity,
+            int power, int healthMax, int health, List<Modifier> modifiers = null)
+        {
+            Power = power;
+            HealthMax = healthMax;
+            Health = health;
 
-//        public void AddModifier(Modifier modifier, int time)
-//        {
-//            //TODO
-//        }
-
-//        public void TurnTick()
-//        {
-//            //TODO
-//        }
-//    }
-//}
+            try
+            {
+                Modifiers = modifiers;
+            }
+            catch (Exception e) { throw e; }
+        }
+    }
+}
