@@ -31,6 +31,9 @@ namespace GameLogic
                 if (value < 0) value = 0;
                 if (value > powerMax) value = powerMax;
                 power = value;
+
+                if (OnPowerChanged != null)
+                    OnPowerChanged.Invoke(this, new GameEventArgs(/*TODO*/));
             }
         }
 
@@ -42,6 +45,7 @@ namespace GameLogic
         public void Attack(IDestroyable target)
         {
             if (target == null) throw new ArgumentException("Invalid target value");
+
             //TODO
         }
 
@@ -54,12 +58,10 @@ namespace GameLogic
             Power += delta;
         }
 
-#pragma warning disable CS0067 // The event 'SoliderCard.OnAttackChanged' is never used
         /// <summary>
         /// Событие, вызывающееся при изменении силы атаки
         /// </summary>
-        public event InGameEvent OnAttackChanged;
-#pragma warning restore CS0067 // The event 'SoliderCard.OnAttackChanged' is never used
+        public event InGameEvent OnPowerChanged;
         #endregion
 
         #region IDestroyable realization
@@ -82,9 +84,21 @@ namespace GameLogic
             get { return health; }
             protected set
             {
-                if (value < 0) value = 0;
+                if (value <= 0)
+                {
+                    value = 0;
+
+                    if (OnDeath != null)
+                        OnDeath.Invoke(this, new GameEventArgs(/*TODO*/));
+
+                    return;
+                }
                 if (value > healthMax) value = healthMax;
+
                 health = value;
+
+                if (OnHealthChanged != null)
+                    OnHealthChanged.Invoke(this, new GameEventArgs(/*TODO*/));
             }
         }
 
@@ -94,22 +108,20 @@ namespace GameLogic
         /// <param name="health">Количество изменяемых единиц здоровья</param>
         public void DeltaHealth(int delta)
         {
+            if (health > 0) Health += delta;
+
             //TODO
         }
 
-#pragma warning disable CS0067 // The event 'SoliderCard.OnDeath' is never used
         /// <summary>
         /// Событие, вызывающееся при смерти
         /// </summary>
         public event InGameEvent OnDeath;
-#pragma warning restore CS0067 // The event 'SoliderCard.OnDeath' is never used
 
-#pragma warning disable CS0067 // The event 'SoliderCard.OnHealthChanged' is never used
         /// <summary>
         /// Событие, вызывающееся при изменении количества здоровья
         /// </summary>
         public event InGameEvent OnHealthChanged;
-#pragma warning restore CS0067 // The event 'SoliderCard.OnHealthChanged' is never used
         #endregion
 
         #region Loyality realization
@@ -120,7 +132,13 @@ namespace GameLogic
         public int Loyality
         {
             get { return loyality; }
-            protected set { if (value < 0) value = 0; if (value > 100) value = 100; loyality = value; }
+            protected set
+            {
+                if (value < 0) value = 0;
+                if (value > 100) value = 100;
+                loyality = value;
+                if (OnLoyalityChanged != null) OnLoyalityChanged.Invoke(this, new GameEventArgs(/*TODO*/));
+            }
         }
 
         /// <summary>
@@ -131,24 +149,17 @@ namespace GameLogic
         {
             Loyality += delta;
         }
-
-#pragma warning disable CS0067 // The event 'SoliderCard.OnLoyalityChanged' is never used
+        
         /// <summary>
         /// Событие, вызывающееся при изменении количества здоровья
         /// </summary>
         public event InGameEvent OnLoyalityChanged;
-#pragma warning restore CS0067 // The event 'SoliderCard.OnLoyalityChanged' is never used
         #endregion;
 
-        private SoliderClass soliderClass;
         /// <summary>
         /// Класс существа
         /// </summary>
-        public SoliderClass SoliderClass
-        {
-            get { return soliderClass; }
-            private set { soliderClass = value; }
-        }
+        public readonly SoliderClass SoliderClass;
 
         //констркутор
         public SoliderCard(int id, int cost, Rarity rarity,
@@ -159,7 +170,7 @@ namespace GameLogic
             HealthMax = healthMax;
             Health = health;
             Loyality = loyality;
-            this.soliderClass = soliderClass;
+            SoliderClass = soliderClass;
 
             try
             {
@@ -185,7 +196,7 @@ namespace GameLogic
                 {
                     var f = other as SoliderCard;
 
-                    if (soliderClass == f.soliderClass)
+                    if (SoliderClass == f.SoliderClass)
                     {
                         if (health == f.health)
                         {
@@ -198,7 +209,7 @@ namespace GameLogic
                         }
                         else return health > f.health ? 1 : 0;
                     }
-                    else return soliderClass > f.soliderClass ? 1 : 0;
+                    else return SoliderClass > f.SoliderClass ? 1 : 0;
                 }
                 else return -1;
             }
@@ -229,7 +240,11 @@ namespace GameLogic
         public void TakeModifier(Modifier modifier)
         {
             try
-            { Modifiers.Add(modifier); }
+            {
+                if (modifier is DurableModifier)
+                    Modifiers.Add(modifier);
+                else modifier.Action();
+            }
             catch (Exception e)
             { throw e; }
         }

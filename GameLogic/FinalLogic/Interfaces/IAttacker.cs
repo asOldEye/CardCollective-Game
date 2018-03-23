@@ -33,6 +33,6 @@
         /// <summary>
         /// Событие, вызывающееся при изменении силы атаки
         /// </summary>
-        event InGameEvent OnAttackChanged;
+        event InGameEvent OnPowerChanged;
     }
 }

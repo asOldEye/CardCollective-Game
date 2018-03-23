@@ -28,7 +28,7 @@
         /// </summary>
         /// <param name="spell">Заклинание из списка доступных</param>
         /// <param name="target">Цель атаки</param>
-        void Cast(SpellCard spell, IDestroyable target = null);
+        void Cast(SpellCard spell /*, Position target = null*/);
 
         /// <summary>
         /// Список доступных заклинаний

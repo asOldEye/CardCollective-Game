@@ -28,8 +28,8 @@ namespace GameLogic
             }
         }
 
-        public DurableModifier(IModified modified, ModifierType type, int impact, int timing = -1)
-            : base(modified, type, impact)
+        public DurableModifier(ModifierType type, int impact, IModified modified = null, int timing = -1)
+            : base(type, impact, modified)
         { this.timing = timing; }
 
         /// <summary>

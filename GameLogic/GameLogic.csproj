@@ -34,27 +34,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="project.json" />
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IModifiedDurable.cs" />
+    <Compile Include="FinalLogic\Interfaces\IModifiedDurable.cs" />
     <Compile Include="Logic\CasterSoliderCard.cs" />
     <Compile Include="Logic\DurableModifier.cs" />
-    <Compile Include="NewLogic\Card.cs" />
-    <Compile Include="NewLogic\Deck.cs" />
-    <Compile Include="NewLogic\Enumerations.cs" />
+    <Compile Include="FinalLogic\Card.cs" />
+    <Compile Include="FinalLogic\Deck.cs" />
+    <Compile Include="Logic\Enumerations.cs" />
     <Compile Include="Logic\InGameEvent.cs" />
-    <Compile Include="Interfaces\IAttacker.cs" />
-    <Compile Include="Interfaces\ICaster.cs" />
-    <Compile Include="Interfaces\IDestroyable.cs" />
-    <Compile Include="Interfaces\IModified.cs" />
+    <Compile Include="FinalLogic\Interfaces\IAttacker.cs" />
+    <Compile Include="FinalLogic\Interfaces\ICaster.cs" />
+    <Compile Include="FinalLogic\Interfaces\IDestroyable.cs" />
+    <Compile Include="FinalLogic\Interfaces\IModified.cs" />
+    <Compile Include="NewLogic\Field.cs" />
     <Compile Include="Logic\Player.cs" />
-    <Compile Include="Logic\Session.cs" />
+    <Compile Include="NewLogic\Position.cs" />
+    <Compile Include="NewLogic\Session.cs" />
     <Compile Include="Logic\SoliderCard.cs" />
     <Compile Include="Logic\SpellCard.cs" />
-    <Compile Include="NewLogic\Modifier.cs" />
+    <Compile Include="FinalLogic\Modifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

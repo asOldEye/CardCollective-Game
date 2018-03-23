@@ -7,25 +7,15 @@ namespace GameLogic
     /// </summary>
     public abstract class Card : IComparable<Card>
     {
-        private Rarity cardRarity;
         /// <summary>
         /// Редкость карты
         /// </summary>
-        public Rarity CardRarity
-        {
-            get { return cardRarity; }
-            protected set { cardRarity = value; }
-        }
-        
-        private int id = -1;
+        public readonly Rarity CardRarity;
+
         /// <summary>
         /// Уникальный идентификатор карты в системе
         /// </summary>
-        public int Id
-        {
-            get { return id; }
-            private set { if (value < 0) throw new ArgumentException("Invalid ID"); id = value; }
-        }
+        public readonly int id = -1;
         
         private int cost = -1;
         /// <summary>
@@ -39,10 +29,12 @@ namespace GameLogic
         
         public Card(int id, int cost, Rarity rarity)
         {
+            if (id < 0) throw new ArgumentException("Invalid ID");
+            this.id = id;
+
             try
-            {
-                Id = id;
-                cardRarity = rarity;
+            {   
+                CardRarity = rarity;
                 Cost = cost;
             }
             catch (Exception e)

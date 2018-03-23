@@ -27,12 +27,13 @@ namespace GameLogic
             protected set { impact = value; }
         }
 
-        public Modifier(IModified modified, ModifierType type, int impact)
+        public Modifier(ModifierType type, int impact, IModified modified = null)
         {
-            this.modified = modified ?? throw new ArgumentNullException();
-            
             this.type = type;
             Impact = impact;
+
+            if (modified != null)
+                this.modified = modified;
         }
 
         /// <summary>
