@@ -34,25 +34,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="project.json" />
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FinalLogic\Interfaces\ILoyal.cs" />
     <Compile Include="FinalLogic\Interfaces\IModifiedDurable.cs" />
     <Compile Include="Logic\CasterSoliderCard.cs" />
-    <Compile Include="Logic\DurableModifier.cs" />
+    <Compile Include="FinalLogic\DurableModifier.cs" />
     <Compile Include="FinalLogic\Card.cs" />
     <Compile Include="FinalLogic\Deck.cs" />
-    <Compile Include="Logic\Enumerations.cs" />
-    <Compile Include="Logic\InGameEvent.cs" />
+    <Compile Include="FinalLogic\Enumerations.cs" />
+    <Compile Include="FinalLogic\InGameEvent.cs" />
     <Compile Include="FinalLogic\Interfaces\IAttacker.cs" />
     <Compile Include="FinalLogic\Interfaces\ICaster.cs" />
     <Compile Include="FinalLogic\Interfaces\IDestroyable.cs" />
     <Compile Include="FinalLogic\Interfaces\IModified.cs" />
-    <Compile Include="NewLogic\Field.cs" />
     <Compile Include="Logic\Player.cs" />
-    <Compile Include="NewLogic\Position.cs" />
-    <Compile Include="NewLogic\Session.cs" />
     <Compile Include="Logic\SoliderCard.cs" />
     <Compile Include="Logic\SpellCard.cs" />
     <Compile Include="FinalLogic\Modifier.cs" />

@@ -6,7 +6,7 @@ namespace GameLogic
     /// <summary>
     /// Карта, представляющая существо
     /// </summary>
-    public class SoliderCard : Card, IDestroyable, IAttacker, IModifiedDurable
+    public class SoliderCard : Card, IDestroyable, IAttacker, IModifiedDurable, ILoyal
     {
         #region IAttacker realization
         private int powerMax = -1;
@@ -30,10 +30,13 @@ namespace GameLogic
             {
                 if (value < 0) value = 0;
                 if (value > powerMax) value = powerMax;
+
+                var args = new GameEventArgs(power < value ? GameEventArgs.Means.Positive : GameEventArgs.Means.Negative, Context.power);
+
                 power = value;
 
                 if (OnPowerChanged != null)
-                    OnPowerChanged.Invoke(this, new GameEventArgs(/*TODO*/));
+                    OnPowerChanged.Invoke(this, args);
             }
         }
 
@@ -89,16 +92,18 @@ namespace GameLogic
                     value = 0;
 
                     if (OnDeath != null)
-                        OnDeath.Invoke(this, new GameEventArgs(/*TODO*/));
+                        OnDeath.Invoke(this, new GameEventArgs(GameEventArgs.Means.Death));
 
                     return;
                 }
                 if (value > healthMax) value = healthMax;
 
+                var args = new GameEventArgs(health < value ? GameEventArgs.Means.Positive : GameEventArgs.Means.Negative, Context.health);
+
                 health = value;
 
                 if (OnHealthChanged != null)
-                    OnHealthChanged.Invoke(this, new GameEventArgs(/*TODO*/));
+                    OnHealthChanged.Invoke(this, args);
             }
         }
 
@@ -136,8 +141,12 @@ namespace GameLogic
             {
                 if (value < 0) value = 0;
                 if (value > 100) value = 100;
+
+                var args = new GameEventArgs(loyality < value ? GameEventArgs.Means.Positive : GameEventArgs.Means.Negative, Context.loyality);
+
                 loyality = value;
-                if (OnLoyalityChanged != null) OnLoyalityChanged.Invoke(this, new GameEventArgs(/*TODO*/));
+
+                if (OnLoyalityChanged != null) OnLoyalityChanged.Invoke(this, args);
             }
         }
 

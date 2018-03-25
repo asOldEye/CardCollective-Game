@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GameLogic
+﻿namespace GameLogic
 {
     /// <summary>
     /// Долговременный модификатор
@@ -22,13 +16,13 @@ namespace GameLogic
             {
                 if (timing == 0)
                 {
-                    OnTimeOut.Invoke(this, new GameEventArgs(/*TODO*/));
+                    OnTimeOut.Invoke(this, new GameEventArgs(GameEventArgs.Means.ModifierEnd));
                 }
                 timing = value;
             }
         }
 
-        public DurableModifier(ModifierType type, int impact, IModified modified = null, int timing = -1)
+        public DurableModifier(Context type, int impact, IModified modified = null, int timing = -1)
             : base(type, impact, modified)
         { this.timing = timing; }
 
@@ -37,8 +31,11 @@ namespace GameLogic
         /// </summary>
         public override void Action()
         {
-            base.Action();
-            timing--;
+            if (timing != 0)
+            {
+                base.Action();
+                timing--;
+            }
         }
 
         /// <summary>

@@ -10,11 +10,11 @@ namespace GameLogic
         //модифицируемый объект
         IModified modified;
 
-        ModifierType type;
+        Context type;
         /// <summary>
         /// То, на что воздействует модификатор
         /// </summary>
-        public ModifierType Type
+        public Context Type
         { get { return type; } }
    
         int impact;
@@ -27,7 +27,7 @@ namespace GameLogic
             protected set { impact = value; }
         }
 
-        public Modifier(ModifierType type, int impact, IModified modified = null)
+        public Modifier(Context type, int impact, IModified modified = null)
         {
             this.type = type;
             Impact = impact;
@@ -43,19 +43,19 @@ namespace GameLogic
         {
             switch (type)
             {
-                case ModifierType.health:
+                case Context.health:
                     if (modified is IDestroyable)
                         (modified as IDestroyable).DeltaHealth(impact);
                     break;
-                case ModifierType.loyality:
-                    if (modified is SoliderCard)
-                        (modified as SoliderCard).DeltaLoyality(impact);
+                case Context.loyality:
+                    if (modified is ILoyal)
+                        (modified as ILoyal).DeltaLoyality(impact);
                     break;
-                case ModifierType.mana:
+                case Context.mana:
                     if (modified is ICaster)
                         (modified as ICaster).DeltaMana(impact);
                     break;
-                case ModifierType.power:
+                case Context.power:
                     if (modified is IAttacker)
                         (modified as IAttacker).DeltaPower(impact);
                     break;

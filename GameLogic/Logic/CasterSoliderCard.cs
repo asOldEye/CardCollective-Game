@@ -26,10 +26,12 @@ namespace GameLogic
                 if (value < 0) value = 0;
                 if (value > ManaMax) value = ManaMax;
 
-                mana = value;
+                var args = new GameEventArgs(mana < value ? GameEventArgs.Means.Positive : GameEventArgs.Means.Negative, Context.mana);
 
+                mana = value;
+                
                 if (OnManaChanged != null)
-                    OnManaChanged.Invoke(this, new GameEventArgs(/*TODO*/));
+                    OnManaChanged.Invoke(this, args);
             }
         }
         
@@ -64,6 +66,10 @@ namespace GameLogic
             //TODO
         }
 
+        /// <summary>
+        /// Изменение количества маны
+        /// </summary>
+        /// <param name="delta"></param>
         public void DeltaMana(int delta)
         { Mana += delta; }
     }

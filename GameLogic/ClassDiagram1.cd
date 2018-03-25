@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GameLogic.SpellCard" Collapsed="true">
+    <Position X="0.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAEAEAABAAAAAAAAAAAQ=</HashCode>
+      <FileName>Logic\SpellCard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameLogic.SoliderCard" Collapsed="true">
+    <Position X="3" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQDAAAAEAAAAQAAACGCIAAxpEAAAABEAAgAAAAJAw=</HashCode>
+      <FileName>Logic\SoliderCard.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="1.158" />
+  </Class>
+  <Class Name="GameLogic.Player" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQCEAAAAAAABAAAAAGgIQARoEEEIABFACgIAAAICg=</HashCode>
+      <FileName>Logic\Player.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="1.167" Collapsed="true" />
+  </Class>
+  <Class Name="GameLogic.CasterSoliderCard" Collapsed="true">
+    <Position X="3" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAABAAAAAAgAAAAAAEAIAABACAIAAAACA=</HashCode>
+      <FileName>Logic\CasterSoliderCard.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GameLogic.Modifier" Collapsed="true">
+    <Position X="3.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAQAAAAEAAAAAABAAAAAQAAAAAAAAQ=</HashCode>
+      <FileName>FinalLogic\Modifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameLogic.GameEventArgs" Collapsed="true">
+    <Position X="6.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FinalLogic\InGameEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameLogic.DurableModifier" Collapsed="true">
+    <Position X="3.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAQAAAQ=</HashCode>
+      <FileName>FinalLogic\DurableModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameLogic.Card" Collapsed="true">
+    <Position X="2" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAABAAABAQAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>FinalLogic\Card.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Struct Name="GameLogic.Deck&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAIAAAAAAAABQAAAgQAASAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>FinalLogic\Deck.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Interface Name="GameLogic.IAttacker" Collapsed="true">
+    <Position X="6.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAQoAAAAABEAAAAAAAAAA=</HashCode>
+      <FileName>FinalLogic\Interfaces\IAttacker.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GameLogic.ICaster" Collapsed="true">
+    <Position X="8" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAABAAAAAAgAAAAAAEAIAAAAAAIAAAAAA=</HashCode>
+      <FileName>FinalLogic\Interfaces\ICaster.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GameLogic.IDestroyable" Collapsed="true">
+    <Position X="6.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQCAAAAAAAAAAAAAAEAIAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>FinalLogic\Interfaces\IDestroyable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GameLogic.ILoyal" Collapsed="true">
+    <Position X="8" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgBAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>FinalLogic\Interfaces\ILoyal.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GameLogic.IModified" Collapsed="true">
+    <Position X="0.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FinalLogic\Interfaces\IModified.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GameLogic.IModifiedDurable" Collapsed="true">
+    <Position X="0.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FinalLogic\Interfaces\IModifiedDurable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="GameLogic.Rarity" Collapsed="true">
+    <Position X="8" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgEAAQAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>FinalLogic\Enumerations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GameLogic.SoliderClass" Collapsed="true">
+    <Position X="6.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACQAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>FinalLogic\Enumerations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GameLogic.Context" Collapsed="true">
+    <Position X="6.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAAEAAAAAAAAAAAAAACg=</HashCode>
+      <FileName>FinalLogic\Enumerations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Delegate Name="GameLogic.InGameEvent" Collapsed="true">
+    <Position X="6.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FinalLogic\InGameEvent.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

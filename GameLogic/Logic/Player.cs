@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
 
 namespace GameLogic
 {
@@ -9,6 +7,45 @@ namespace GameLogic
     /// </summary>
     public class Player : IDestroyable, IAttacker, ICaster, IModified
     {
+        public Player(int health, int healthMax, int power, int powerMax, int mana, int manaMax, 
+            Deck<SpellCard> spells, Deck<SoliderCard> soliders)
+        {
+            this.spells = spells;
+            this.soliders = soliders;
+
+            Health = health;
+            HealthMax = healthMax;
+
+            Power = power;
+            PowerMax = powerMax;
+
+            Mana = mana;
+            this.manaMax = manaMax;
+        }
+
+        private Deck<SoliderCard> soliders;
+        /// <summary>
+        /// Колода солдат игрока
+        /// </summary>
+        public Deck<SoliderCard> Soliders
+        { get { return soliders; } }
+
+        /// <summary>
+        /// Вытаскивает карту солдата из колоды на стол
+        /// </summary>
+        /// <param name="solider"></param>
+        public void CastSolider(SoliderCard solider/*,Position position*/)
+        {
+            //TODO
+
+            //if (OnSoliderCasted != null) OnSoliderCasted.Invoke(this, new GameEventArgs(/*TODO*/));
+        }
+
+        /// <summary>
+        /// Вызывается при вызове карты из колоды на стол
+        /// </summary>
+        public event InGameEvent OnSoliderCasted;
+
         #region IAttacker realization
         private int powerMax = -1;
         /// <summary>
@@ -31,10 +68,13 @@ namespace GameLogic
             {
                 if (value < 0) value = 0;
                 if (value > powerMax) value = powerMax;
+
+                var args = new GameEventArgs(power < value ? GameEventArgs.Means.Positive : GameEventArgs.Means.Negative, Context.power);
+
                 power = value;
 
                 if (OnPowerChanged != null)
-                    OnPowerChanged.Invoke(this, new GameEventArgs(/*TODO*/));
+                    OnPowerChanged.Invoke(this, args);
             }
         }
 
@@ -90,16 +130,18 @@ namespace GameLogic
                     value = 0;
 
                     if (OnDeath != null)
-                        OnDeath.Invoke(this, new GameEventArgs(/*TODO*/));
+                        OnDeath.Invoke(this, new GameEventArgs(GameEventArgs.Means.Death));
 
                     return;
                 }
                 if (value > healthMax) value = healthMax;
 
+                var args = new GameEventArgs(health < value ? GameEventArgs.Means.Positive : GameEventArgs.Means.Negative, Context.health);
+
                 health = value;
 
                 if (OnHealthChanged != null)
-                    OnHealthChanged.Invoke(this, new GameEventArgs(/*TODO*/));
+                    OnHealthChanged.Invoke(this, args);
             }
         }
 
@@ -131,7 +173,7 @@ namespace GameLogic
         /// </summary>
         /// <param name="modifier">Модификатор</param>
         public void TakeModifier(Modifier modifier)
-        { modifier.Action(); }
+        { if (modifier != null) modifier.Action(); }
         #endregion
 
         #region ICaseter realization
@@ -154,10 +196,12 @@ namespace GameLogic
                 if (value < 0) value = 0;
                 if (value > ManaMax) value = ManaMax;
 
+                var args = new GameEventArgs(mana < value ? GameEventArgs.Means.Positive : GameEventArgs.Means.Negative, Context.mana);
+
                 mana = value;
 
                 if (OnManaChanged != null)
-                    OnManaChanged.Invoke(this, new GameEventArgs(/*TODO*/));
+                    OnManaChanged.Invoke(this, args);
             }
         }
 

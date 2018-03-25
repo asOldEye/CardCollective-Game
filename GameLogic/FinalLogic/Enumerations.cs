@@ -24,7 +24,7 @@
     /// <summary>
     /// Направление воздействия модификатора
     /// </summary>
-    public enum ModifierType
+    public enum Context
     {
         health,
         loyality,
