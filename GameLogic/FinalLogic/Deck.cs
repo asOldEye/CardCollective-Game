@@ -10,14 +10,14 @@ namespace GameLogic
     public struct Deck<T> : IEnumerable where T : Card
     {
         //карты в колоде
-        readonly List<T> cards;
-
+        List<T> cards;
+        
         /// <summary>
         /// Количество карт в колоде
         /// </summary>
         public int Count
         { get { return cards.Count; } }
-        
+
         /// <summary>
         /// Перемешивание колоды
         /// </summary>
@@ -54,29 +54,19 @@ namespace GameLogic
                 {
                     cards.Sort(comparition);
                 }
-                catch (Exception e) { throw e; }
+                catch (Exception e)
+                { throw e; }
         }
 
         //конструктор для колоды карт
-        public Deck(List<T> cards)
+        public Deck(IEnumerable<T> cards = null)
         {
             this.cards = new List<T>();
 
             if (cards == null) return;
 
             foreach (var card in cards)
-                if (card == null) throw new NullReferenceException("No valid cards in deck");
-
-            this.cards = new List<T>(cards);
-        }
-        public Deck(T[] cards)
-        {
-            this.cards = new List<T>();
-
-            if (cards == null) return;
-
-            foreach (var card in cards)
-                if (card == null) throw new NullReferenceException("No valid cards in deck");
+                if (!(card is T)) throw new NullReferenceException("Not valid card in deck");
 
             this.cards = new List<T>(cards);
         }
@@ -88,7 +78,7 @@ namespace GameLogic
         /// <param name="index">Индекс, по которому добавляется карта</param>
         public void AddCard(T card, int index = 0)
         {
-            if (card == null) throw new NullReferenceException("Null card");
+            if (card == null) throw new ArgumentNullException();
 
             if (index >= 0 && index < Count)
                 cards.Insert(index, card);
@@ -103,12 +93,12 @@ namespace GameLogic
         /// <returns>Удалена ли карта из колоды</returns>
         public bool RemoveCard(T card)
         {
-            if (cards.Count == 0)
-                throw new NullReferenceException("Empty deck");
-
-            if (card == null) throw new NullReferenceException("Null card");
-
-            return cards.Remove(card);
+            try
+            {
+                return cards.Remove(card);
+            }
+            catch (Exception e)
+            { throw e; }
         }
 
         /// <summary>

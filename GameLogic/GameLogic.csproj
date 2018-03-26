@@ -34,13 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="project.json" />
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FinalLogic\Interfaces\ILoyal.cs" />
     <Compile Include="FinalLogic\Interfaces\IModifiedDurable.cs" />
+    <Compile Include="FinalLogic\Interfaces\IPositionable.cs" />
+    <Compile Include="FinalLogic\Position.cs" />
     <Compile Include="Logic\CasterSoliderCard.cs" />
     <Compile Include="FinalLogic\DurableModifier.cs" />
     <Compile Include="FinalLogic\Card.cs" />

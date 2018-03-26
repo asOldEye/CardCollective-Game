@@ -30,6 +30,7 @@ namespace GameLogic
             this.means = means;
         }
     }
+
     /// <summary>
     /// Делегирует внутрисессийные события
     /// </summary>

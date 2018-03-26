@@ -61,7 +61,7 @@ namespace GameLogic
         /// </summary>
         /// <param name="spell">Заклинание</param>
         /// /// <param name="target">Позиция на доске, к которой применяется заклинание</param>
-        public void Cast(SpellCard spell/*, Position target*/)
+        public void Cast(SpellCard spell, Position target)
         {
             //TODO
         }

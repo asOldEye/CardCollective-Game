@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GameLogic
+﻿namespace GameLogic
 {
     /// <summary>
     /// Объекты, на которые можно наложить долговременные модификаторы

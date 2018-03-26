@@ -43,7 +43,12 @@ namespace GameLogic
             modifiers.CopyTo(modifiers, 0);
         }
 
-        public void Use(/*Position position*/)
+        public void Use(IModified target)
+        {
+            //TODO
+        }
+
+        public void Use(Position target)
         {
             //TODO
         }

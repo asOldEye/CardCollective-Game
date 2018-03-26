@@ -16,7 +16,8 @@
             {
                 if (timing == 0)
                 {
-                    OnTimeOut.Invoke(this, new GameEventArgs(GameEventArgs.Means.ModifierEnd));
+                    if (OnTimeOut != null)
+                        OnTimeOut.Invoke(this, new GameEventArgs(GameEventArgs.Means.ModifierEnd));
                 }
                 timing = value;
             }

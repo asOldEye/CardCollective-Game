@@ -5,9 +5,9 @@ namespace GameLogic
     /// <summary>
     /// Реализация игрока
     /// </summary>
-    public class Player : IDestroyable, IAttacker, ICaster, IModified
+    public class Player : IDestroyable, IAttacker, ICaster, IModified, IPositionable
     {
-        public Player(int health, int healthMax, int power, int powerMax, int mana, int manaMax, 
+        public Player(int health, int healthMax, int power, int powerMax, int mana, int manaMax,
             Deck<SpellCard> spells, Deck<SoliderCard> soliders)
         {
             this.spells = spells;
@@ -176,7 +176,7 @@ namespace GameLogic
         { if (modifier != null) modifier.Action(); }
         #endregion
 
-        #region ICaseter realization
+        #region ICaster realization
         readonly int manaMax = -1;
         /// <summary>
         /// Максимальное количество маны
@@ -222,13 +222,31 @@ namespace GameLogic
         /// </summary>
         /// <param name="spell">Заклинание</param>
         /// /// <param name="target">Позиция на доске, к которой применяется заклинание</param>
-        public void Cast(SpellCard spell/*, Position target*/)
+        public void Cast(SpellCard spell, Position target)
         {
             //TODO
         }
 
         public void DeltaMana(int delta)
         { Mana += delta; }
+        #endregion
+
+        #region IPositionable realization
+        public event InGameEvent OnPositionAppears;
+
+        public event InGameEvent OnPositionDisappears;
+
+        public event InGameEvent OnPositionSet;
+
+        Position? position;
+        public Position? Position
+        {
+            get { return position; }
+            set
+            { 
+                //TODO
+            }
+        }
         #endregion
     }
 }

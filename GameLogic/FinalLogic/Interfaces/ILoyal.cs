@@ -1,11 +1,15 @@
 ﻿namespace GameLogic
 {
+    /// <summary>
+    /// Лояльность карты
+    /// </summary>
     interface ILoyal
     {
         /// <summary>
         /// Параметр лояльности карты
         /// </summary>
-        int Loyality { get; }
+        int Loyality
+        { get; }
 
         /// <summary>
         /// Изменение параметра лояльности
