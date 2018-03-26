@@ -7,7 +7,7 @@ namespace GameLogic
         /// <summary>
         /// Список модификаторов
         /// </summary>
-        List<Modifier> Modifiers { get; }
+        List<DurableModifier> Modifiers { get; }
 
         /// <summary>
         /// Выполняет модификаторы, либо убирает их по истечении ходов

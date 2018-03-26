@@ -6,18 +6,15 @@ namespace GameLogic
     /// <summary>
     /// Карта, представляющая существо
     /// </summary>
-    public class SoliderCard : Card, IDestroyable, IAttacker, IModifiedDurable, ILoyal
+    public class SoliderCard : Card, IDestroyable, IAttacker, IModifiedDurable, ILoyal, IPositionable
     {
         #region IAttacker realization
-        private int powerMax = -1;
+        readonly int powerMax = -1;
         /// <summary>
         /// Максимальная сила атаки
         /// </summary>
         public int PowerMax
-        {
-            get { return powerMax; }
-            protected set { if (value < 0) throw new ArgumentException(); }
-        }
+        { get { return powerMax; } }
 
         private int power = -1;
         /// <summary>
@@ -57,9 +54,7 @@ namespace GameLogic
         /// </summary>
         /// <param name="health">Количество изменяемых единиц здоровья</param>
         public void DeltaPower(int delta)
-        {
-            Power += delta;
-        }
+        { Power += delta; }
 
         /// <summary>
         /// Событие, вызывающееся при изменении силы атаки
@@ -68,15 +63,12 @@ namespace GameLogic
         #endregion
 
         #region IDestroyable realization
-        private int healthMax = -1;
+        readonly int healthMax = -1;
         /// <summary>
         /// Максимальное здоровье карты
         /// </summary>
         public int HealthMax
-        {
-            get { return health; }
-            protected set { if (value < 0) throw new ArgumentException("Wrong health value"); health = value; }
-        }
+        { get { return health; } }
 
         private int health = -1;
         /// <summary>
@@ -96,7 +88,8 @@ namespace GameLogic
 
                     return;
                 }
-                if (value > healthMax) value = healthMax;
+
+                if (value > HealthMax) value = HealthMax;
 
                 var args = new GameEventArgs(health < value ? GameEventArgs.Means.Positive : GameEventArgs.Means.Negative, Context.health);
 
@@ -113,9 +106,8 @@ namespace GameLogic
         /// <param name="health">Количество изменяемых единиц здоровья</param>
         public void DeltaHealth(int delta)
         {
-            if (health > 0) Health += delta;
-
-            //TODO
+            //TODO модификаторы, дебил
+            Health += delta;
         }
 
         /// <summary>
@@ -146,7 +138,8 @@ namespace GameLogic
 
                 loyality = value;
 
-                if (OnLoyalityChanged != null) OnLoyalityChanged.Invoke(this, args);
+                if (OnLoyalityChanged != null)
+                    OnLoyalityChanged.Invoke(this, args);
             }
         }
 
@@ -155,10 +148,8 @@ namespace GameLogic
         /// </summary>
         /// <param name="delta"></param>
         public void DeltaLoyality(int delta)
-        {
-            Loyality += delta;
-        }
-        
+        { Loyality += delta; }
+
         /// <summary>
         /// Событие, вызывающееся при изменении количества здоровья
         /// </summary>
@@ -172,20 +163,27 @@ namespace GameLogic
 
         //констркутор
         public SoliderCard(int id, int cost, Rarity rarity,
-            int power, int healthMax, int health, int loyality, SoliderClass soliderClass, List<Modifier> modifiers = null)
+            int powerMax, int power, int healthMax, int health, int loyality, SoliderClass soliderClass, ICollection<DurableModifier> modifiers = null)
             : base(id, cost, rarity)
         {
+            this.powerMax = powerMax;
             Power = power;
-            HealthMax = healthMax;
+
+            this.healthMax = healthMax;
             Health = health;
+
             Loyality = loyality;
             SoliderClass = soliderClass;
 
-            try
+            if (modifiers == null)
             {
-                Modifiers = modifiers;
+                this.modifiers = new List<DurableModifier>();
+                return;
             }
-            catch (Exception e) { throw e; }
+
+            foreach (var f in modifiers)
+                if (f == null) modifiers.Remove(f);
+            this.modifiers = new List<DurableModifier>(modifiers);
         }
 
         //перегрузка метода сравнения
@@ -226,21 +224,12 @@ namespace GameLogic
         }
 
         #region IModified realization
-        List<Modifier> modifiers;
+        List<DurableModifier> modifiers;
         /// <summary>
         /// Список модификаторов
         /// </summary>
-        public List<Modifier> Modifiers
-        {
-            get { return modifiers; }
-            protected set
-            {
-                if (value == null) throw new ArgumentNullException();
-                foreach (var f in value)
-                    if (f == null) value.Remove(f);
-                modifiers = new List<Modifier>(value);
-            }
-        }
+        public List<DurableModifier> Modifiers
+        { get { return modifiers; } }
 
         /// <summary>
         /// Добавление нового модификатора
@@ -251,7 +240,9 @@ namespace GameLogic
             try
             {
                 if (modifier is DurableModifier)
-                    Modifiers.Add(modifier);
+                {
+                    Modifiers.Add(modifier as DurableModifier);
+                }
                 else modifier.Action();
             }
             catch (Exception e)
@@ -264,7 +255,45 @@ namespace GameLogic
         public void TurnRun()
         {
             foreach (var f in modifiers)
+            {
                 f.Action();
+
+                if (f.Timing == 0)
+                    modifiers.Remove(f);
+            }
+        }
+        #endregion
+
+        #region IPositionable realization
+        public event InGameEvent OnPositionAppears;
+
+        public event InGameEvent OnPositionDisappears;
+
+        public event InGameEvent OnPositionSet;
+
+        Position? position;
+        public Position? Position
+        {
+            get { return position; }
+            set
+            {
+                // TODO допили это говно, оно мне не нравистя
+                if (position == null && value != null)
+                {
+                    if (OnPositionAppears != null)
+                        OnPositionAppears.Invoke(this, new GameEventArgs(GameEventArgs.Means.Appears));
+                }
+                else
+                if (value != null)
+                {
+                    if (OnPositionSet != null)
+                        OnPositionSet.Invoke(this, new GameEventArgs(GameEventArgs.Means.Position));
+                }
+                else if (OnPositionDisappears != null)
+                    OnPositionDisappears.Invoke(this, new GameEventArgs(GameEventArgs.Means.Position));
+
+                position = value;
+            }
         }
         #endregion
     }

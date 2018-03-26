@@ -53,6 +53,7 @@
     <Compile Include="FinalLogic\Interfaces\IDestroyable.cs" />
     <Compile Include="FinalLogic\Interfaces\IModified.cs" />
     <Compile Include="Logic\Player.cs" />
+    <Compile Include="Logic\Session.cs" />
     <Compile Include="Logic\SoliderCard.cs" />
     <Compile Include="Logic\SpellCard.cs" />
     <Compile Include="FinalLogic\Modifier.cs" />

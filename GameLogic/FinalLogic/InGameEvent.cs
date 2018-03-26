@@ -2,6 +2,9 @@
 
 namespace GameLogic
 {
+
+    //TODO допилить систему эвентов
+
     /// <summary>
     /// Событийные аргументы внутри сессии
     /// </summary>
@@ -21,7 +24,9 @@ namespace GameLogic
             Positive,
             Negative,
             Death,
-            ModifierEnd
+            Appears,
+            ModifierEnd,
+            Position
         }
 
         public GameEventArgs(Means means, Context? context = null )

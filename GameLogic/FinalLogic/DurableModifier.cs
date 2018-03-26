@@ -3,7 +3,7 @@
     /// <summary>
     /// Долговременный модификатор
     /// </summary>
-    class DurableModifier : Modifier
+    public class DurableModifier : Modifier
     {
         private int timing = -1;
         /// <summary>

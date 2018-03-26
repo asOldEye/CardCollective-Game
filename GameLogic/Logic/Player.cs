@@ -227,6 +227,16 @@ namespace GameLogic
             //TODO
         }
 
+        /// <summary>
+        /// Создание заклинания
+        /// </summary>
+        /// <param name="spell">Заклинание</param>
+        /// /// <param name="target">Позиция на доске, к которой применяется заклинание</param>
+        public void Cast(SpellCard spell, IPositionable target)
+        {
+            //TODO
+        }
+
         public void DeltaMana(int delta)
         { Mana += delta; }
         #endregion
