@@ -45,7 +45,9 @@ namespace GameLogic
 
         public void Use(IModified target)
         {
-            //TODO
+            if (target == null) throw new ArgumentNullException();
+                foreach (var f in modifiers)
+                    target.TakeModifier(new Modifier(f, target));
         }
 
         public void Use(Position target)

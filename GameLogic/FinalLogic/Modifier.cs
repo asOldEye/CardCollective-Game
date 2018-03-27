@@ -63,5 +63,14 @@ namespace GameLogic
             catch (Exception e)
             { throw e; }
         }
+
+        public Modifier(Modifier original, IModified modified)
+        {
+            if (original == null || modified == null)
+                throw new ArgumentNullException();
+
+            this.MemberwiseClone();
+            this.modified = modified;
+        }
     }
 }

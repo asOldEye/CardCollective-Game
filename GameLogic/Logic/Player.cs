@@ -34,7 +34,7 @@ namespace GameLogic
         /// Вытаскивает карту солдата из колоды на стол
         /// </summary>
         /// <param name="solider"></param>
-        public void CastSolider(SoliderCard solider/*,Position position*/)
+        public void CastSolider(SoliderCard solider, Position position)
         {
             //TODO
 

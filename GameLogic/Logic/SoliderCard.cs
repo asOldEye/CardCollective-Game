@@ -46,7 +46,19 @@ namespace GameLogic
         {
             if (target == null) throw new ArgumentException("Invalid target value");
 
-            //TODO
+            int damage = power + loyality / 10 + Session.random.Next(0, power) / 10;
+
+            if (target is SoliderCard)
+            {
+                var targClass = (target as SoliderCard).soliderClass;
+
+                
+
+            }
+            else
+            {
+            }
+            target.DeltaHealth(damage);
         }
 
         /// <summary>
@@ -159,7 +171,7 @@ namespace GameLogic
         /// <summary>
         /// Класс существа
         /// </summary>
-        public readonly SoliderClass SoliderClass;
+        public readonly SoliderClass soliderClass;
 
         //констркутор
         public SoliderCard(int id, int cost, Rarity rarity,
@@ -173,7 +185,7 @@ namespace GameLogic
             Health = health;
 
             Loyality = loyality;
-            SoliderClass = soliderClass;
+            this.soliderClass = soliderClass;
 
             if (modifiers == null)
             {
@@ -203,7 +215,7 @@ namespace GameLogic
                 {
                     var f = other as SoliderCard;
 
-                    if (SoliderClass == f.SoliderClass)
+                    if (soliderClass == f.soliderClass)
                     {
                         if (health == f.health)
                         {
@@ -216,7 +228,7 @@ namespace GameLogic
                         }
                         else return health > f.health ? 1 : 0;
                     }
-                    else return SoliderClass > f.SoliderClass ? 1 : 0;
+                    else return soliderClass > f.soliderClass ? 1 : 0;
                 }
                 else return -1;
             }
