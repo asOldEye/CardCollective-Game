@@ -11,7 +11,7 @@ namespace GameLogic
     {
         //карты в колоде
         List<T> cards;
-        
+
         /// <summary>
         /// Количество карт в колоде
         /// </summary>
@@ -23,9 +23,6 @@ namespace GameLogic
         /// </summary>
         public void Randomize()
         {
-            if (cards.Count == 0)
-                throw new NullReferenceException("Empty deck");
-
             Random random = new Random();
 
             for (int i = 0; i < cards.Count; i++)
@@ -44,9 +41,6 @@ namespace GameLogic
         /// <param name="comparition">Параметр сравнения</param>
         public void Sort(Comparison<T> comparition = null)
         {
-            if (cards.Count == 0)
-                throw new NullReferenceException("Empty deck");
-
             if (comparition == null)
                 cards.Sort();
             else
@@ -66,7 +60,7 @@ namespace GameLogic
             if (cards == null) return;
 
             foreach (var card in cards)
-                if (!(card is T)) throw new NullReferenceException("Not valid card in deck");
+                if (card == null) throw new NullReferenceException("Not valid card in deck");
 
             this.cards = new List<T>(cards);
         }
@@ -80,10 +74,10 @@ namespace GameLogic
         {
             if (card == null) throw new ArgumentNullException();
 
-            if (index >= 0 && index < Count)
+            if (index >= 0 && index <= Count)
                 cards.Insert(index, card);
             else
-                throw new IndexOutOfRangeException("Wrong index");
+                throw new IndexOutOfRangeException();
         }
 
         /// <summary>
@@ -93,12 +87,7 @@ namespace GameLogic
         /// <returns>Удалена ли карта из колоды</returns>
         public bool RemoveCard(T card)
         {
-            try
-            {
-                return cards.Remove(card);
-            }
-            catch (Exception e)
-            { throw e; }
+            return cards.Remove(card);
         }
 
         /// <summary>

@@ -28,19 +28,19 @@ namespace GameLogic
             protected set { if (value < 0) value = 0; distance = value; }
         }
 
-        public SpellCard(int id, int cost, Rarity rarity, Modifier modifier)
-            : base(id, cost, rarity)
+        public SpellCard(Session session, int id, int cost, Modifier modifier)
+            : base(session, id, cost)
         {
             if (modifier == null) throw new ArgumentNullException();
             modifiers = new Modifier[] { modifier };
         }
 
-        public SpellCard(int id, int cost, Rarity rarity, Modifier[] modifiers)
-            : base(id, cost, rarity)
+        public SpellCard(Session session, int id, int cost, Modifier[] modifiers)
+            : base(session, id, cost)
         {
             if (modifiers == null) throw new ArgumentNullException();
             if (modifiers.Length == 0) throw new ArgumentException();
-            modifiers.CopyTo(modifiers, 0);
+            modifiers.CopyTo(this.modifiers, 0);
         }
 
         public void Use(IModified target)

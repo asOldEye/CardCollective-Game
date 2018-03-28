@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace GameLogic
 {
@@ -7,9 +8,12 @@ namespace GameLogic
     /// </summary>
     public class CasterSoliderCard : SoliderCard, ICaster
     {
-        public CasterSoliderCard(int manaMax, int mana, Deck<SpellCard> spells,
-            int id, int cost, Rarity rarity, int powerMax, int power, int healthMax, int health, int loyality, SoliderClass soliderClass, List<DurableModifier> modifiers = null)
-            : base(id, cost, rarity, powerMax, power, healthMax, health, loyality, soliderClass, modifiers)
+        public CasterSoliderCard(Session session, 
+            int id, int cost, 
+            int powerMax, int power, int healthMax, int health, int loyality, SoliderClass soliderClass,
+            int manaMax, int mana, Deck<SpellCard> spells, 
+            List<DurableModifier> modifiers = null)
+            : base(session, id, cost, powerMax, power, healthMax, health, loyality, soliderClass, modifiers)
         {
             this.manaMax = manaMax;
             Mana = mana;
@@ -44,7 +48,7 @@ namespace GameLogic
             }
         }
 
-        public readonly Deck<SpellCard> spells;
+        readonly Deck<SpellCard> spells;
         /// <summary>
         /// Колода заклинаний
         /// </summary>
@@ -63,28 +67,19 @@ namespace GameLogic
         /// /// <param name="target">Позиция на доске, к которой применяется заклинание</param>
         public void Cast(SpellCard spell, Position target)
         {
-            if (!spells.RemoveCard(spell)) throw new System.ArgumentException("This is not my spell");
+            if (!spells.RemoveCard(spell)) throw new ArgumentException("This is not my spell");
+
+            if(spell.Cost > mana) throw new ArgumentException("Low mana");
+
+            try
+            {
+                spell.Use(target);
+            }
+            catch (Exception e)
+            { throw e; }
 
             Mana -= spell.Cost;
-
-            //TODO
         }
-
-        /// <summary>
-        /// Создание заклинания
-        /// </summary>
-        /// <param name="spell">Заклинание</param>
-        /// /// <param name="target">Позиция на доске, к которой применяется заклинание</param>
-        public void Cast(SpellCard spell, IPositionable target)
-        {
-            if (!spells.RemoveCard(spell)) throw new System.ArgumentException("This is not my spell");
-
-            Mana -= spell.Cost;
-
-            //TODO
-        }
-
-        //TODO сделай так, чтобы мы могли все объекты посмотреть на сцене, и чтобы они все могли подняться к сессии и работать с ней непосредственно
 
         /// <summary>
         /// Изменение количества маны

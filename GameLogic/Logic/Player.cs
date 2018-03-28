@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GameLogic
 {
     /// <summary>
     /// Реализация игрока
     /// </summary>
-    public class Player : IDestroyable, IAttacker, ICaster, IModified, IPositionable
+    public class Player : SessionObject, IDestroyable, IAttacker, ICaster, IModified, IPositionable
     {
-        public Player(int health, int healthMax, int power, int powerMax, int mana, int manaMax,
-            Deck<SpellCard> spells, Deck<SoliderCard> soliders)
+        public Player(Session session, 
+            int health, int healthMax, int power, int powerMax, int mana, int manaMax,
+            Deck<SpellCard> spells, Deck<SoliderCard> soliders) 
+            : base(session)
         {
             this.spells = spells;
             this.soliders = soliders;
@@ -36,9 +39,15 @@ namespace GameLogic
         /// <param name="solider"></param>
         public void CastSolider(SoliderCard solider, Position position)
         {
-            //TODO
+            try
+            {
+                // TODO
+            }
+            catch (Exception e)
+            { throw e; }
 
-            //if (OnSoliderCasted != null) OnSoliderCasted.Invoke(this, new GameEventArgs(/*TODO*/));
+            if (OnSoliderCasted != null)
+                OnSoliderCasted.Invoke(solider, new GameEventArgs(GameEventArgs.Means.Appears));
         }
 
         /// <summary>
@@ -224,19 +233,22 @@ namespace GameLogic
         /// /// <param name="target">Позиция на доске, к которой применяется заклинание</param>
         public void Cast(SpellCard spell, Position target)
         {
-            //TODO
+            if (!spells.RemoveCard(spell)) throw new ArgumentException("This is not my spell");
+
+            try
+            {
+                spell.Use(target);
+            }
+            catch (Exception e)
+            { throw e; }
+
+            Mana -= spell.Cost;
         }
 
         /// <summary>
-        /// Создание заклинания
+        /// Изменение количества маны
         /// </summary>
-        /// <param name="spell">Заклинание</param>
-        /// /// <param name="target">Позиция на доске, к которой применяется заклинание</param>
-        public void Cast(SpellCard spell, IPositionable target)
-        {
-            //TODO
-        }
-
+        /// <param name="delta"></param>
         public void DeltaMana(int delta)
         { Mana += delta; }
         #endregion
@@ -253,7 +265,9 @@ namespace GameLogic
         {
             get { return position; }
             set
-            { 
+            {
+                if (value == null) throw new NullReferenceException();
+
                 //TODO
             }
         }

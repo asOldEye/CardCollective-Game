@@ -31,13 +31,6 @@
         void Cast(SpellCard spell, Position target);
 
         /// <summary>
-        /// Создать заклинание
-        /// </summary>
-        /// <param name="spell">Заклинание из списка доступных</param>
-        /// <param name="target">Цель атаки</param>
-        void Cast(SpellCard spell, IPositionable target);
-
-        /// <summary>
         /// Список доступных заклинаний
         /// </summary>
         Deck<SpellCard> Spells

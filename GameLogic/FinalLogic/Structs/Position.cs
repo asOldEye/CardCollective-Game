@@ -50,7 +50,9 @@ namespace GameLogic
         /// <returns></returns>
         public static int Distance(Position first, Position second)
         {
-            return (int)Math.Sqrt((first.x - second.x) * (first.x - second.x) + (first.y - second.y) * (first.y - second.y));
+            return (int)Math.Sqrt(
+                (first.x - second.x) * (first.x - second.x) + 
+                (first.y - second.y) * (first.y - second.y));
         }
     }
 }

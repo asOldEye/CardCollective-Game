@@ -52,7 +52,7 @@ namespace GameLogic
             {
                 var targClass = (target as SoliderCard).soliderClass;
 
-                
+                //TODO
 
             }
             else
@@ -174,9 +174,11 @@ namespace GameLogic
         public readonly SoliderClass soliderClass;
 
         //констркутор
-        public SoliderCard(int id, int cost, Rarity rarity,
-            int powerMax, int power, int healthMax, int health, int loyality, SoliderClass soliderClass, ICollection<DurableModifier> modifiers = null)
-            : base(id, cost, rarity)
+        public SoliderCard(Session session, 
+            int id, int cost,
+            int powerMax, int power, int healthMax, int health, int loyality, SoliderClass soliderClass, 
+            ICollection<DurableModifier> modifiers = null)
+            : base(session, id, cost)
         {
             this.powerMax = powerMax;
             Power = power;

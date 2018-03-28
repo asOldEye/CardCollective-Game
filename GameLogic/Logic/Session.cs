@@ -6,9 +6,27 @@ using System.Threading.Tasks;
 
 namespace GameLogic
 {
+    /// <summary>
+    /// Игровая сессия
+    /// </summary>
     public abstract class Session
     {
-        List<KeyValuePair<Player, IPositionable[]>> players;
+        /// <summary>
+        /// Экземпляр рандома
+        /// </summary>
+        internal static readonly Random random = new Random();
+
+        //список игроков
+        Player[] players;
+
+        int turn = 1;
+        /// <summary>
+        /// Текущий ход
+        /// </summary>
+        public int Turn
+        { get { return turn; } }
+
+        readonly Map map;
 
         public void AddPlayer(Player player)
         {
@@ -19,14 +37,23 @@ namespace GameLogic
 
         }
 
-        int turn = 1;
-        public int Turn
-        { get { return turn; } }
+        
 
-        Position mapSize;
+
+        //TODO урон от класса к классу
+
+        
 
         public Player hisTurn;
 
-        internal static readonly Random random = new Random();
+        internal SessionObject Find()
+        {
+            return null;
+        }
+
+        public bool Move()
+        {
+            return false;
+        }
     }
 }

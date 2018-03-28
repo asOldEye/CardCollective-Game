@@ -14,7 +14,7 @@
             get { return timing; }
             protected set
             {
-                if (timing == 0)
+                if (value == 0)
                 {
                     if (OnTimeOut != null)
                         OnTimeOut.Invoke(this, new GameEventArgs(GameEventArgs.Means.ModifierEnd));

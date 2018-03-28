@@ -31,6 +31,9 @@ namespace GameLogic
         {
             this.type = type;
             Impact = impact;
+
+            if (modified != null)
+                this.modified = modified;
         }
 
         /// <summary>
@@ -69,7 +72,9 @@ namespace GameLogic
             if (original == null || modified == null)
                 throw new ArgumentNullException();
 
-            this.MemberwiseClone();
+            type = original.type;
+            impact = original.impact;
+
             this.modified = modified;
         }
     }
