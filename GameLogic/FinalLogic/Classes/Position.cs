@@ -5,7 +5,7 @@ namespace GameLogic
     /// <summary>
     /// Позиция объекта на игровом поле
     /// </summary>
-    public struct Position
+    public class Position
     {
         int x;
         /// <summary>
@@ -40,19 +40,6 @@ namespace GameLogic
             if (x < 0 || y < 0) throw new ArgumentException();
             this.x = x;
             this.y = y;
-        }
-
-        /// <summary>
-        /// Дистанция между двумя позициями
-        /// </summary>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        /// <returns></returns>
-        public static int Distance(Position first, Position second)
-        {
-            return (int)Math.Sqrt(
-                (first.x - second.x) * (first.x - second.x) + 
-                (first.y - second.y) * (first.y - second.y));
         }
     }
 }

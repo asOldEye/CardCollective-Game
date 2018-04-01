@@ -34,5 +34,9 @@
         /// Событие, вызывающееся при изменении силы атаки
         /// </summary>
         event InGameEvent OnPowerChanged;
+        /// <summary>
+        /// Событие, вызывающееся при атаке
+        /// </summary>
+        event InGameEvent OnAttack;
     }
 }

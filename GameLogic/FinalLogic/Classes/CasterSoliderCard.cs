@@ -8,24 +8,22 @@ namespace GameLogic
     /// </summary>
     public class CasterSoliderCard : SoliderCard, ICaster
     {
-        public CasterSoliderCard(Session session, 
-            int id, int cost, 
-            int powerMax, int power, int healthMax, int health, int loyality, SoliderClass soliderClass,
-            int manaMax, int mana, Deck<SpellCard> spells, 
+        public CasterSoliderCard(Session session, int cost,
+            int powerMax, int power, int healthMax, int health, int loyality,
+            int manaMax, int mana, Deck<SpellCard> spells,
             List<DurableModifier> modifiers = null)
-            : base(session, id, cost, powerMax, power, healthMax, health, loyality, soliderClass, modifiers)
+            : base(session, cost, powerMax, power, healthMax, health, loyality, SoliderClass.circle, modifiers)
         {
-            this.manaMax = manaMax;
+            ManaMax = manaMax;
             Mana = mana;
-            this.spells = spells;
+            Spells = spells;
         }
 
-        readonly int manaMax = -1;
+        #region ICaster realization
         /// <summary>
         /// Максимальное количество маны
         /// </summary>
-        public int ManaMax
-        { get { return manaMax; } }
+        public int ManaMax { get; } = -1;
 
         int mana = -1;
         /// <summary>
@@ -39,53 +37,74 @@ namespace GameLogic
                 if (value < 0) value = 0;
                 if (value > ManaMax) value = ManaMax;
 
-                var args = new GameEventArgs(mana < value ? GameEventArgs.Means.Positive : GameEventArgs.Means.Negative, Context.mana);
+                Means means = mana > value ? Means.Positive : Means.Negative;
 
                 mana = value;
 
                 if (OnManaChanged != null)
-                    OnManaChanged.Invoke(this, args);
+                    OnManaChanged.Invoke(this, new SessionEventArgs(means, Context.mana));
             }
         }
 
-        readonly Deck<SpellCard> spells;
         /// <summary>
         /// Колода заклинаний
         /// </summary>
-        public Deck<SpellCard> Spells
-        { get { return spells; } }
-
-        /// <summary>
-        /// Событие изменения количества маны
-        /// </summary>
-        public event InGameEvent OnManaChanged;
+        public Deck<SpellCard> Spells { get; }
 
         /// <summary>
         /// Создание заклинания
         /// </summary>
         /// <param name="spell">Заклинание</param>
-        /// /// <param name="target">Позиция на доске, к которой применяется заклинание</param>
-        public void Cast(SpellCard spell, Position target)
+        /// <param name="owner">Владелец цели</param>
+        /// <param name="target">Цель</param>
+        public void Cast(SpellCard spell, Player owner, Position target)
         {
-            if (!spells.RemoveCard(spell)) throw new ArgumentException("This is not my spell");
-
-            if(spell.Cost > mana) throw new ArgumentException("Low mana");
+            if (!Spells.RemoveCard(spell)) throw new ArgumentException("This is not my spell");
+            if (spell.Cost > mana) throw new ArgumentException("Low mana");
 
             try
             {
-                spell.Use(target);
+                spell.Use(owner, target);
             }
-            catch (Exception e)
-            { throw e; }
+            catch { throw; }
 
             Mana -= spell.Cost;
+
+            if (OnSpellCast != null)
+                OnSpellCast.Invoke(this, new ObjSessionEventArgs(spell));
         }
 
         /// <summary>
         /// Изменение количества маны
         /// </summary>
-        /// <param name="delta"></param>
+        /// <param name="delta">меняемое количество</param>
         public void DeltaMana(int delta)
         { Mana += delta; }
+
+        /// <summary>
+        /// Событие изменения количества маны
+        /// </summary>
+        public event InGameEvent OnManaChanged;
+        /// <summary>
+        /// Событие создания нового заклинания
+        /// </summary>
+        public event InGameEvent OnSpellCast;
+        #endregion
+
+        public override int CompareTo(Card other)
+        {
+            if (other is CasterSoliderCard)
+            {
+                var f = other as CasterSoliderCard;
+                if (ManaMax == f.ManaMax)
+                {
+                    if (Spells.Count == f.Spells.Count)
+                        return 0;
+                    return Spells.Count > f.Spells.Count ? 1 : -1;
+                }
+                return ManaMax > f.ManaMax ? 1 : -1;
+            }
+            return base.CompareTo(other);
+        }
     }
 }

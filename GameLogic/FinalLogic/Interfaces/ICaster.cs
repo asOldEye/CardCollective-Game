@@ -28,7 +28,7 @@
         /// </summary>
         /// <param name="spell">Заклинание из списка доступных</param>
         /// <param name="target">Цель атаки</param>
-        void Cast(SpellCard spell, Position target);
+        void Cast(SpellCard spell, Player owner, Position target);
 
         /// <summary>
         /// Список доступных заклинаний
@@ -40,5 +40,9 @@
         /// Событие, вызывающееся при изменении силы атаки
         /// </summary>
         event InGameEvent OnManaChanged;
+        /// <summary>
+        /// Событие вызывается при создании карты-заклинания
+        /// </summary>
+        event InGameEvent OnSpellCast;
     }
 }

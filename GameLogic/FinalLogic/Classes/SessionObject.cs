@@ -1,18 +1,19 @@
 ﻿namespace GameLogic
 {
     /// <summary>
-    /// Любой объект, находящийся в данной сессии
+    /// Объект, находящийся в данной сессии
     /// </summary>
     public class SessionObject
     {
-        Session session;
         /// <summary>
         /// Сессия, в  которой находится объект
         /// </summary>
-        public Session Session
-        { get { return session; } }
+        public readonly Session Session;
 
         public SessionObject(Session session)
-        { this.session = session ?? throw new System.ArgumentNullException(); }
+        {
+            if(session == null) throw new System.ArgumentNullException();
+            Session = session;
+        }
     }
 }

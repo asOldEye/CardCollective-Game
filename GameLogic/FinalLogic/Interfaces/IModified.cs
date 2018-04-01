@@ -10,5 +10,10 @@
         /// </summary>
         /// <param name="modifier">Модификатор</param>
         void TakeModifier(Modifier modifier);
+
+        /// <summary>
+        /// Вызывается при использовании модификатора
+        /// </summary>
+        event InGameEvent OnModifierUse;
     }
 }

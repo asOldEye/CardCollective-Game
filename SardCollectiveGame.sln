@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.27428.2011
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Session", "GameLogic\Session.csproj", "{FF41A41D-5C90-4E11-95C0-C8A3D3D34FDC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "D:\repos\CardCollectiveClient\Assembly-CSharp.csproj", "{2A72A153-83A4-603F-24AF-A27FC8475D7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionProtocol", "ConnectionProtocol\ConnectionProtocol.csproj", "{C8117337-AEFB-4A77-B329-67DD92BDC58B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{FF41A41D-5C90-4E11-95C0-C8A3D3D34FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF41A41D-5C90-4E11-95C0-C8A3D3D34FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF41A41D-5C90-4E11-95C0-C8A3D3D34FDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A72A153-83A4-603F-24AF-A27FC8475D7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A72A153-83A4-603F-24AF-A27FC8475D7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A72A153-83A4-603F-24AF-A27FC8475D7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A72A153-83A4-603F-24AF-A27FC8475D7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8117337-AEFB-4A77-B329-67DD92BDC58B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8117337-AEFB-4A77-B329-67DD92BDC58B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8117337-AEFB-4A77-B329-67DD92BDC58B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8117337-AEFB-4A77-B329-67DD92BDC58B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

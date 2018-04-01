@@ -7,34 +7,17 @@ namespace GameLogic
     /// </summary>
     public class Modifier
     {
-        //модифицируемый объект
-        readonly IModified modified = null;
+        public IModified Modified { get; set; } = null;
 
-        Context type;
         /// <summary>
         /// То, на что воздействует модификатор
         /// </summary>
-        public Context Type
-        { get { return type; } }
-   
-        int impact;
+        public Context Type { get; }
+
         /// <summary>
         /// Сила воздействия модификатора
         /// </summary>
-        public int Impact
-        {
-            get { return impact; }
-            protected set { impact = value; }
-        }
-
-        public Modifier(Context type, int impact, IModified modified = null)
-        {
-            this.type = type;
-            Impact = impact;
-
-            if (modified != null)
-                this.modified = modified;
-        }
+        public int Impact { get; protected set; }
 
         /// <summary>
         /// Воздействие на модифицируемый объект
@@ -43,28 +26,32 @@ namespace GameLogic
         {
             try
             {
-                switch (type)
+                switch (Type)
                 {
                     case Context.health:
-                        if (modified is IDestroyable)
-                            (modified as IDestroyable).DeltaHealth(impact);
+                        (Modified as IDestroyable).DeltaHealth(Impact);
                         break;
                     case Context.loyality:
-                        if (modified is ILoyal)
-                            (modified as ILoyal).DeltaLoyality(impact);
+                        (Modified as ILoyal).DeltaLoyality(Impact);
                         break;
                     case Context.mana:
-                        if (modified is ICaster)
-                            (modified as ICaster).DeltaMana(impact);
+                        (Modified as ICaster).DeltaMana(Impact);
                         break;
                     case Context.power:
-                        if (modified is IAttacker)
-                            (modified as IAttacker).DeltaPower(impact);
+                        (Modified as IAttacker).DeltaPower(Impact);
                         break;
                 }
             }
-            catch (Exception e)
-            { throw e; }
+            catch { throw; }
+        }
+
+        public Modifier(Context type, int impact, IModified modified = null)
+        {
+            Type = type;
+            Impact = impact;
+
+            if (modified != null)
+                Modified = modified;
         }
 
         public Modifier(Modifier original, IModified modified)
@@ -72,10 +59,10 @@ namespace GameLogic
             if (original == null || modified == null)
                 throw new ArgumentNullException();
 
-            type = original.type;
-            impact = original.impact;
+            Type = original.Type;
+            Impact = original.Impact;
 
-            this.modified = modified;
+            Modified = modified;
         }
     }
 }

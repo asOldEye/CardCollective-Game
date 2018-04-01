@@ -16,8 +16,10 @@ namespace GameLogic
         /// </summary>
         internal static readonly Random random = new Random();
 
+        //TODO наследовать рандом
+
         //список игроков
-        Player[] players;
+        List<Pair<Player, Map>> players;
 
         int turn = 1;
         /// <summary>
@@ -28,6 +30,11 @@ namespace GameLogic
 
         readonly Map map;
 
+        public static int ProbabilisticRandom()
+        {
+            return 0;
+        }
+
         public void AddPlayer(Player player)
         {
 
@@ -37,12 +44,22 @@ namespace GameLogic
 
         }
 
-        
+        readonly List<InGameEvent> events;
 
+
+        internal void AddEvent()
+        {
+
+        }
 
         //TODO урон от класса к классу
 
-        
+        public int[,] SoliderClassesAttackMatrix;
+
+        public void Serialize()
+        {
+            //TODO
+        }
 
         public Player hisTurn;
 

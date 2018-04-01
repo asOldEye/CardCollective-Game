@@ -6,15 +6,15 @@ namespace GameLogic
     /// <summary>
     /// Реализация игрока
     /// </summary>
-    public class Player : SessionObject, IDestroyable, IAttacker, ICaster, IModified, IPositionable
+    public class Player : SessionObject, IDestroyable, IAttacker, ICaster, IModified
     {
         public Player(Session session, 
             int health, int healthMax, int power, int powerMax, int mana, int manaMax,
-            Deck<SpellCard> spells, Deck<SoliderCard> soliders) 
+            Deck<SpellCard> spells, Deck<SoliderCard> soliders, Map map) 
             : base(session)
         {
-            this.spells = spells;
-            this.soliders = soliders;
+            Spells = spells;
+            Soliders = soliders;
 
             Health = health;
             HealthMax = healthMax;
@@ -23,15 +23,25 @@ namespace GameLogic
             PowerMax = powerMax;
 
             Mana = mana;
-            this.manaMax = manaMax;
+            ManaMax = manaMax;
+
+            Map = map;
         }
 
-        private Deck<SoliderCard> soliders;
         /// <summary>
         /// Колода солдат игрока
         /// </summary>
-        public Deck<SoliderCard> Soliders
-        { get { return soliders; } }
+        public Deck<SoliderCard> Soliders { get; }
+
+        /// <summary>
+        /// Предоставляет доступ к карте игрока
+        /// </summary>
+        public Map Map { get; }
+
+        /// <summary>
+        /// Расположенные карты
+        /// </summary>
+        public List<SoliderCard> LocatedCards;
 
         /// <summary>
         /// Вытаскивает карту солдата из колоды на стол
@@ -41,13 +51,24 @@ namespace GameLogic
         {
             try
             {
-                // TODO
+                if (Map.FindByPosition(position).Obj2 != null)
+                    throw new ArgumentException("Position already used");
             }
-            catch (Exception e)
-            { throw e; }
+            catch { throw; }
+
+            Map.SetObj(solider, position);
+            solider.OnDeath += OnSoliderDeath;
 
             if (OnSoliderCasted != null)
-                OnSoliderCasted.Invoke(solider, new GameEventArgs(GameEventArgs.Means.Appears));
+                OnSoliderCasted.Invoke(solider, new ObjSessionEventArgs(solider));
+        }
+
+        /// <summary>
+        /// Вызывается при смерти одной из моих карт
+        /// </summary>
+        public void OnSoliderDeath(object sender, SessionEventArgs e)
+        {
+            LocatedCards.Remove(sender as SoliderCard);
         }
 
         /// <summary>
@@ -56,17 +77,12 @@ namespace GameLogic
         public event InGameEvent OnSoliderCasted;
 
         #region IAttacker realization
-        private int powerMax = -1;
         /// <summary>
         /// Максимальная сила атаки
         /// </summary>
-        public int PowerMax
-        {
-            get { return powerMax; }
-            protected set { if (value < 0) throw new ArgumentException(); }
-        }
+        public int PowerMax { get; }
 
-        private int power = -1;
+        private int power;
         /// <summary>
         /// Сила атаки
         /// </summary>
@@ -75,15 +91,15 @@ namespace GameLogic
             get { return power; }
             protected set
             {
-                if (value < 0) value = 0;
-                if (value > powerMax) value = powerMax;
+                if (value < 1) value = 1;
+                if (value > PowerMax) value = PowerMax;
 
-                var args = new GameEventArgs(power < value ? GameEventArgs.Means.Positive : GameEventArgs.Means.Negative, Context.power);
+                Means means = power > value ? Means.Positive : Means.Negative;
 
                 power = value;
 
                 if (OnPowerChanged != null)
-                    OnPowerChanged.Invoke(this, args);
+                    OnPowerChanged.Invoke(this, new SessionEventArgs(means, Context.power));
             }
         }
 
@@ -96,7 +112,10 @@ namespace GameLogic
         {
             if (target == null) throw new ArgumentException("Invalid target value");
 
-            //TODO
+            if (OnAttack != null)
+                OnAttack.Invoke(this, new ObjSessionEventArgs(target as SessionObject));
+
+            target.DeltaHealth(-power);
         }
 
         /// <summary>
@@ -104,28 +123,25 @@ namespace GameLogic
         /// </summary>
         /// <param name="health">Количество изменяемых единиц здоровья</param>
         public void DeltaPower(int delta)
-        {
-            Power += delta;
-        }
+        { Power += delta; }
 
         /// <summary>
         /// Событие, вызывающееся при изменении силы атаки
         /// </summary>
         public event InGameEvent OnPowerChanged;
+        /// <summary>
+        /// Событие, вызывающееся при изменении силы атаки
+        /// </summary>
+        public event InGameEvent OnAttack;
         #endregion
 
         #region IDestroyable realization
-        private int healthMax = -1;
         /// <summary>
         /// Максимальное здоровье карты
         /// </summary>
-        public int HealthMax
-        {
-            get { return health; }
-            protected set { if (value < 0) throw new ArgumentException("Wrong health value"); health = value; }
-        }
+        public int HealthMax { get; }
 
-        private int health = -1;
+        private int health;
         /// <summary>
         /// Параметр здоровья карты
         /// </summary>
@@ -134,23 +150,22 @@ namespace GameLogic
             get { return health; }
             protected set
             {
-                if (value <= 0)
+                Means means = health > value ? Means.Positive : Means.Negative;
+
+                if (value < 0)
                 {
-                    value = 0;
+                    health = 0;
 
                     if (OnDeath != null)
-                        OnDeath.Invoke(this, new GameEventArgs(GameEventArgs.Means.Death));
-
+                        OnDeath.Invoke(this, new SessionEventArgs(Means.Negative, Context.health));
                     return;
                 }
-                if (value > healthMax) value = healthMax;
-
-                var args = new GameEventArgs(health < value ? GameEventArgs.Means.Positive : GameEventArgs.Means.Negative, Context.health);
+                if (value > HealthMax) value = HealthMax;
 
                 health = value;
 
                 if (OnHealthChanged != null)
-                    OnHealthChanged.Invoke(this, args);
+                    OnHealthChanged.Invoke(this, new SessionEventArgs(means, Context.health));
             }
         }
 
@@ -159,11 +174,7 @@ namespace GameLogic
         /// </summary>
         /// <param name="health">Количество изменяемых единиц здоровья</param>
         public void DeltaHealth(int delta)
-        {
-            if (health > 0) Health += delta;
-
-            //TODO
-        }
+        { Health += delta; }
 
         /// <summary>
         /// Событие, вызывающееся при смерти
@@ -182,16 +193,28 @@ namespace GameLogic
         /// </summary>
         /// <param name="modifier">Модификатор</param>
         public void TakeModifier(Modifier modifier)
-        { if (modifier != null) modifier.Action(); }
+        {
+            if (modifier == null)
+                throw new ArgumentNullException();
+
+            modifier.Modified = this;
+            modifier.Action();
+
+            if (OnModifierUse != null)
+                OnModifierUse.Invoke(this, new ModifierSessionEventArgs(modifier));
+        }
+
+        /// <summary>
+        /// Вызывается при использовании модификатора
+        /// </summary>
+        public event InGameEvent OnModifierUse;
         #endregion
 
         #region ICaster realization
-        readonly int manaMax = -1;
         /// <summary>
         /// Максимальное количество маны
         /// </summary>
-        public int ManaMax
-        { get { return manaMax; } }
+        public int ManaMax { get; } = -1;
 
         int mana = -1;
         /// <summary>
@@ -205,72 +228,58 @@ namespace GameLogic
                 if (value < 0) value = 0;
                 if (value > ManaMax) value = ManaMax;
 
-                var args = new GameEventArgs(mana < value ? GameEventArgs.Means.Positive : GameEventArgs.Means.Negative, Context.mana);
+                Means means = mana > value ? Means.Positive : Means.Negative;
 
                 mana = value;
 
                 if (OnManaChanged != null)
-                    OnManaChanged.Invoke(this, args);
+                    OnManaChanged.Invoke(this, new SessionEventArgs(means, Context.mana));
             }
         }
 
-        public readonly Deck<SpellCard> spells;
         /// <summary>
         /// Колода заклинаний
         /// </summary>
-        public Deck<SpellCard> Spells
-        { get { return spells; } }
-
-        /// <summary>
-        /// Событие изменения количества маны
-        /// </summary>
-        public event InGameEvent OnManaChanged;
+        public Deck<SpellCard> Spells { get; }
 
         /// <summary>
         /// Создание заклинания
         /// </summary>
         /// <param name="spell">Заклинание</param>
-        /// /// <param name="target">Позиция на доске, к которой применяется заклинание</param>
-        public void Cast(SpellCard spell, Position target)
+        /// <param name="owner">Владелец цели</param>
+        /// <param name="target">Цель</param>
+        public void Cast(SpellCard spell, Player owner, Position target)
         {
-            if (!spells.RemoveCard(spell)) throw new ArgumentException("This is not my spell");
+            if (!Spells.RemoveCard(spell)) throw new ArgumentException("This is not my spell");
+            if (spell.Cost > mana) throw new ArgumentException("Low mana");
 
             try
             {
-                spell.Use(target);
+                spell.Use(owner, target);
             }
-            catch (Exception e)
-            { throw e; }
+            catch { throw; }
 
             Mana -= spell.Cost;
+
+            if (OnSpellCast != null)
+                OnSpellCast.Invoke(this, new ObjSessionEventArgs(spell));
         }
 
         /// <summary>
         /// Изменение количества маны
         /// </summary>
-        /// <param name="delta"></param>
+        /// <param name="delta">меняемое количество</param>
         public void DeltaMana(int delta)
         { Mana += delta; }
-        #endregion
 
-        #region IPositionable realization
-        public event InGameEvent OnPositionAppears;
-
-        public event InGameEvent OnPositionDisappears;
-
-        public event InGameEvent OnPositionSet;
-
-        Position? position;
-        public Position? Position
-        {
-            get { return position; }
-            set
-            {
-                if (value == null) throw new NullReferenceException();
-
-                //TODO
-            }
-        }
+        /// <summary>
+        /// Событие изменения количества маны
+        /// </summary>
+        public event InGameEvent OnManaChanged;
+        /// <summary>
+        /// Событие создания нового заклинания
+        /// </summary>
+        public event InGameEvent OnSpellCast;
         #endregion
     }
 }

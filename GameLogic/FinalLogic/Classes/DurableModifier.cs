@@ -1,47 +1,40 @@
-﻿namespace GameLogic
+﻿using System;
+
+namespace GameLogic
 {
     /// <summary>
     /// Долговременный модификатор
     /// </summary>
     public class DurableModifier : Modifier
     {
-        private int timing = -1;
         /// <summary>
         /// Оставшееся время действия. -1 => бесконечно
         /// </summary>
-        public int Timing
+        public int Timing { get; set; } = -1;
+
+        public DurableModifier(Context type, int impact, int timing = -1, IModified modified = null)
+            : base(type, impact, modified)
         {
-            get { return timing; }
-            protected set
-            {
-                if (value == 0)
-                {
-                    if (OnTimeOut != null)
-                        OnTimeOut.Invoke(this, new GameEventArgs(GameEventArgs.Means.ModifierEnd));
-                }
-                timing = value;
-            }
+            if (timing == 0) throw new ArgumentException("Wrong timing");
+            Timing = timing;
         }
 
-        public DurableModifier(Context type, int impact, IModified modified = null, int timing = -1)
-            : base(type, impact, modified)
-        { this.timing = timing; }
+        public DurableModifier(Modifier original, IModified modified, int timing = -1)
+            : base(original, modified)
+        {
+            if (timing == 0) throw new ArgumentException("Wrong timing");
+            Timing = timing;
+        }
 
         /// <summary>
-        /// Воздействует на прикрепленный объект объект
+        /// Воздействует на объект
         /// </summary>
         public override void Action()
         {
-            if (timing != 0)
-            {
-                base.Action();
-                timing--;
-            }
-        }
+            if (Timing == 0) return;
 
-        /// <summary>
-        /// Вызывается по истечении срока действия
-        /// </summary>
-        public event InGameEvent OnTimeOut;
+            base.Action();
+            if (Timing > 0) Timing--;
+        }
     }
 }

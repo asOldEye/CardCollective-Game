@@ -13,5 +13,20 @@ namespace GameLogic
         /// Выполняет модификаторы, либо убирает их по истечении ходов
         /// </summary>
         void TurnRun();
+
+        /// <summary>
+        /// Удаляет модификатор
+        /// </summary>
+        /// <param name="modifier"></param>
+        void DelModifier(DurableModifier modifier);
+
+        /// <summary>
+        /// Вызывается при добавлении модификатора
+        /// </summary>
+        event InGameEvent OnModifierAdd;
+        /// <summary>
+        /// Вызывается при удалении модификатора
+        /// </summary>
+        event InGameEvent OnModifierRemove;
     }
 }

@@ -38,26 +38,28 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FinalLogic\Classes\Pair.cs" />
+    <Compile Include="FinalLogic\Delegates\InGameEvent.cs" />
     <Compile Include="FinalLogic\Interfaces\ILoyal.cs" />
     <Compile Include="FinalLogic\Interfaces\IModifiedDurable.cs" />
     <Compile Include="FinalLogic\Interfaces\IPositionable.cs" />
-    <Compile Include="FinalLogic\Structs\Position.cs" />
+    <Compile Include="FinalLogic\Classes\Position.cs" />
     <Compile Include="FinalLogic\Classes\CasterSoliderCard.cs" />
     <Compile Include="FinalLogic\Classes\DurableModifier.cs" />
     <Compile Include="FinalLogic\Classes\Card.cs" />
     <Compile Include="FinalLogic\Structs\Deck.cs" />
-    <Compile Include="Logic\Enumerations.cs" />
-    <Compile Include="Logic\InGameEvent.cs" />
+    <Compile Include="FinalLogic\Classes\Enumerations.cs" />
+    <Compile Include="FinalLogic\Classes\InGameEvent.cs" />
     <Compile Include="FinalLogic\Interfaces\IAttacker.cs" />
     <Compile Include="FinalLogic\Interfaces\ICaster.cs" />
     <Compile Include="FinalLogic\Interfaces\IDestroyable.cs" />
     <Compile Include="FinalLogic\Interfaces\IModified.cs" />
     <Compile Include="Logic\Map.cs" />
-    <Compile Include="Logic\Player.cs" />
+    <Compile Include="FinalLogic\Classes\Player.cs" />
     <Compile Include="Logic\Session.cs" />
     <Compile Include="FinalLogic\Classes\SessionObject.cs" />
-    <Compile Include="Logic\SoliderCard.cs" />
-    <Compile Include="Logic\SpellCard.cs" />
+    <Compile Include="FinalLogic\Classes\SoliderCard.cs" />
+    <Compile Include="FinalLogic\Classes\SpellCard.cs" />
     <Compile Include="FinalLogic\Classes\Modifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

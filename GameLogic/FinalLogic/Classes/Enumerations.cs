@@ -1,17 +1,6 @@
 ﻿namespace GameLogic
 {
     /// <summary>
-    /// Редкость
-    /// </summary>
-    public enum Rarity
-    {
-        frequent,
-        normal,
-        rarely,
-        uniquely
-    }
-
-    /// <summary>
     /// Классы существ
     /// </summary>
     public enum SoliderClass
@@ -30,5 +19,13 @@
         loyality,
         mana,
         power
+    }
+    /// <summary>
+    /// Значение события
+    /// </summary>
+    public enum Means
+    {
+        Positive,
+        Negative
     }
 }

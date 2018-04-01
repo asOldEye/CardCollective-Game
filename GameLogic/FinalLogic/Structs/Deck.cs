@@ -7,7 +7,7 @@ namespace GameLogic
     /// <summary>
     /// Колода карт
     /// </summary>
-    public struct Deck<T> : IEnumerable where T : Card
+    public struct Deck<T> : IEnumerable <T> where T : Card
     {
         //карты в колоде
         List<T> cards;
@@ -17,23 +17,6 @@ namespace GameLogic
         /// </summary>
         public int Count
         { get { return cards.Count; } }
-
-        /// <summary>
-        /// Перемешивание колоды
-        /// </summary>
-        public void Randomize()
-        {
-            Random random = new Random();
-
-            for (int i = 0; i < cards.Count; i++)
-            {
-                var f = random.Next(0, cards.Count);
-
-                var buffer = cards[f];
-                cards[f] = cards[i];
-                cards[i] = buffer;
-            }
-        }
 
         /// <summary>
         /// Сортировка колоды по параметру сравнения, либо по умолчанию
@@ -48,8 +31,7 @@ namespace GameLogic
                 {
                     cards.Sort(comparition);
                 }
-                catch (Exception e)
-                { throw e; }
+                catch { throw; }
         }
 
         //конструктор для колоды карт
@@ -91,20 +73,6 @@ namespace GameLogic
         }
 
         /// <summary>
-        /// Вытащить верхнюю карту из колоды
-        /// </summary>
-        /// <returns>Возвращает вытащенную карту</returns>
-        public T PullCard()
-        {
-            if (cards.Count == 0)
-                throw new NullReferenceException("Empty or null deck");
-
-            var card = cards[0];
-            cards.RemoveAt(0);
-            return card;
-        }
-
-        /// <summary>
         /// Представляет колоду карт массивом
         /// </summary>
         /// <returns>Массив карт в колоде</returns>
@@ -113,10 +81,14 @@ namespace GameLogic
             return cards.ToArray();
         }
 
-        //Реализация IEnumerable 
-        public IEnumerator GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
-            return ((IEnumerable)cards).GetEnumerator();
+            return ((IEnumerable<T>)cards).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable<T>)cards).GetEnumerator();
         }
     }
 }
