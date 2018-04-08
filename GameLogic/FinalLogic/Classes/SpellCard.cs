@@ -51,20 +51,18 @@ namespace GameLogic
         {
             if (owner == null) throw new ArgumentNullException();
 
-            var f = owner.Map.ByRadius(target);
+            var f = owner.Map.ByRadius(target, Radius);
 
             foreach (var targ in f)
             {
-                var obj = targ.Obj2;
-
-                if (obj is IModified)
+                if (targ is IModified)
                 {
                     foreach (var mod in Modifiers)
                     {
-                        if (obj is IModifiedDurable)
-                            (obj as IModifiedDurable).TakeModifier(mod);
+                        if (targ is IModifiedDurable)
+                            (targ as IModifiedDurable).TakeModifier(mod);
                         else
-                            (obj as IModified).TakeModifier(mod);
+                            (targ as IModified).TakeModifier(mod);
                     }
                 }
             }
@@ -82,20 +80,18 @@ namespace GameLogic
 
             if (target is IPositionable)
             {
-                var f = owner.Map.ByRadius((target as IPositionable).Position);
+                var f = owner.Map.ByRadius((target as IPositionable).Position, Radius);
 
                 foreach (var targ in f)
                 {
-                    var obj = targ.Obj2;
-
-                    if (obj is IModified)
+                    if (targ is IModified)
                     {
                         foreach (var mod in Modifiers)
                         {
-                            if (obj is IModifiedDurable)
-                                (obj as IModifiedDurable).TakeModifier(mod);
+                            if (targ is IModifiedDurable)
+                                (targ as IModifiedDurable).TakeModifier(mod);
                             else
-                                (obj as IModified).TakeModifier(mod);
+                                (targ as IModified).TakeModifier(mod);
                         }
                     }
                 }

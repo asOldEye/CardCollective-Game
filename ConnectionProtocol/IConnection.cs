@@ -1,23 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace ConnectionProtocol
 {
-    public interface IConnection
+    public interface IConnection<T> : IDisposable, IProgress<float>
     {
-        Stack<object> Recieved
-        { get; }
+        bool IsConnected { get; }
 
-        void Send(object obj);
+        IPAddress EndPoint { get; }
 
-        event EventHandler OnDisconnect;
+        Stack<T> Received { get; }
+        
+        Stream ReceivingStream { get; set; }
+
+        bool StreamingSupported { get; }
+
+        bool StreamingReady { get; set; }
+
+        void Send(T obj);
+
+        void Send(Stream stream, StreamPriority priority);
+
+        void Disconnect();
+
+        #region Events
         event EventHandler OnConnect;
+        event EventHandler OnDisconnect;
 
-        bool Connected
-        { get; }
-
-        IPAddress EndPoint
-        { get; }
+        event EventHandler OnReceived;
+        event EventHandler OnStreamReceived;
+        event EventHandler OnStreamSended;
+        #endregion
     }
 }

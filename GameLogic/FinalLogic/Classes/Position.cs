@@ -41,5 +41,10 @@ namespace GameLogic
             this.x = x;
             this.y = y;
         }
+
+        public static int Distance(Position p1, Position p2)
+        {
+            return (int)Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
+        }
     }
 }

@@ -38,8 +38,8 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FinalLogic\Classes\Pair.cs" />
-    <Compile Include="FinalLogic\Delegates\InGameEvent.cs" />
+    <Compile Include="FinalLogic\Structs\Pair.cs" />
+    <Compile Include="FinalLogic\Events\InGameEventcs.cs" />
     <Compile Include="FinalLogic\Interfaces\ILoyal.cs" />
     <Compile Include="FinalLogic\Interfaces\IModifiedDurable.cs" />
     <Compile Include="FinalLogic\Interfaces\IPositionable.cs" />

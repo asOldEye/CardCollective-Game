@@ -5,12 +5,12 @@
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
-    public class Pair<T1, T2>
+    public struct Pair<T1, T2>
     {
         public Pair(T1 obj1 = default(T1), T2 obj2 = default(T2))
         {
-            this.Obj1 = obj1;
-            this.Obj2 = obj2;
+            Obj1 = obj1;
+            Obj2 = obj2;
         }
 
         /// <summary>

@@ -15,20 +15,15 @@ namespace GameLogic
         /// Экземпляр рандома
         /// </summary>
         internal static readonly Random random = new Random();
-
-        //TODO наследовать рандом
-
+        
         //список игроков
-        List<Pair<Player, Map>> players;
+        List<Player> players;
 
-        int turn = 1;
         /// <summary>
         /// Текущий ход
         /// </summary>
-        public int Turn
-        { get { return turn; } }
-
-        readonly Map map;
+        public int Turn { get; protected set; } = 1;
+        public bool IsPlay { get; protected set; } = false;
 
         public static int ProbabilisticRandom()
         {
@@ -39,34 +34,15 @@ namespace GameLogic
         {
 
         }
+
         public void DelPlayer(Player player)
         {
 
         }
 
         readonly List<InGameEvent> events;
-
-
-        internal void AddEvent()
-        {
-
-        }
-
-        //TODO урон от класса к классу
-
+        
         public int[,] SoliderClassesAttackMatrix;
-
-        public void Serialize()
-        {
-            //TODO
-        }
-
-        public Player hisTurn;
-
-        internal SessionObject Find()
-        {
-            return null;
-        }
 
         public bool Move()
         {
