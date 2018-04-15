@@ -7,10 +7,22 @@ namespace GameLogic
     /// <summary>
     /// Колода карт
     /// </summary>
-    public struct Deck<T> : IEnumerable <T> where T : Card
+    public struct Deck<T> : IEnumerable<T> where T : Card
     {
-        //карты в колоде
         List<T> cards;
+
+        public Deck(IEnumerable<T> cards = null)
+        {
+            if (cards == null)
+                this.cards = new List<T>();
+            else
+            {
+                foreach (var card in cards)
+                    if (card == null) throw new NullReferenceException("Not valid card in deck");
+
+                this.cards = new List<T>(cards);
+            }
+        }
 
         /// <summary>
         /// Количество карт в колоде
@@ -22,29 +34,15 @@ namespace GameLogic
         /// Сортировка колоды по параметру сравнения, либо по умолчанию
         /// </summary>
         /// <param name="comparition">Параметр сравнения</param>
-        public void Sort(Comparison<T> comparition = null)
+        public void Sort(Comparison<T> comparison = null)
         {
-            if (comparition == null)
-                cards.Sort();
+            if (comparison == null) cards.Sort();
             else
                 try
                 {
-                    cards.Sort(comparition);
+                    cards.Sort(comparison);
                 }
                 catch { throw; }
-        }
-
-        //конструктор для колоды карт
-        public Deck(IEnumerable<T> cards = null)
-        {
-            this.cards = new List<T>();
-
-            if (cards == null) return;
-
-            foreach (var card in cards)
-                if (card == null) throw new NullReferenceException("Not valid card in deck");
-
-            this.cards = new List<T>(cards);
         }
 
         /// <summary>
@@ -58,8 +56,7 @@ namespace GameLogic
 
             if (index >= 0 && index <= Count)
                 cards.Insert(index, card);
-            else
-                throw new IndexOutOfRangeException();
+            else throw new IndexOutOfRangeException();
         }
 
         /// <summary>
@@ -68,27 +65,19 @@ namespace GameLogic
         /// <param name="card">Удаляемая карта</param>
         /// <returns>Удалена ли карта из колоды</returns>
         public bool RemoveCard(T card)
-        {
-            return cards.Remove(card);
-        }
+        { return cards.Remove(card); }
 
         /// <summary>
         /// Представляет колоду карт массивом
         /// </summary>
         /// <returns>Массив карт в колоде</returns>
         public T[] ToArray()
-        {
-            return cards.ToArray();
-        }
+        { return cards.ToArray(); }
 
         public IEnumerator<T> GetEnumerator()
-        {
-            return ((IEnumerable<T>)cards).GetEnumerator();
-        }
+        { return ((IEnumerable<T>)cards).GetEnumerator(); }
 
         IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable<T>)cards).GetEnumerator();
-        }
+        { return ((IEnumerable<T>)cards).GetEnumerator(); }
     }
 }

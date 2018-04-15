@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{95A86BD6-56A4-4607-BBB7-C33D94FC91F5}</ProjectGuid>
+    <ProjectGuid>{5614FA1B-7022-4A45-96F5-3FB19FE2B252}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>test</RootNamespace>
-    <AssemblyName>test</AssemblyName>
+    <RootNamespace>testClient</RootNamespace>
+    <AssemblyName>testClient</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />

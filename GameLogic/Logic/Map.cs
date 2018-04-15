@@ -8,17 +8,13 @@ namespace GameLogic
     /// </summary>
     public struct Map
     {
-        //карта
         Pair<Modifier, IPositionable>[,] map;
 
         /// <summary>
         /// Размеры карты
         /// </summary>
         public Position Size
-        {
-            get
-            { return new Position(map.GetLength(0), map.GetLength(1)); }
-        }
+        { get { return new Position(map.GetLength(0), map.GetLength(1)); }}
 
         public Map(Position size, Pair<Modifier, float>[] possibleModifiersRarity = null)
         {

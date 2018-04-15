@@ -3,8 +3,8 @@
     /// <summary>
     /// Пара объектов
     /// </summary>
-    /// <typeparam name="T1"></typeparam>
-    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T1">Тип первого объекта</typeparam>
+    /// <typeparam name="T2">Тип второго объекта</typeparam>
     public struct Pair<T1, T2>
     {
         public Pair(T1 obj1 = default(T1), T2 obj2 = default(T2))
