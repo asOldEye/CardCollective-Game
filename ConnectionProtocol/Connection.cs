@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using AuxiliaryLibrary;
 
 namespace ConnectionProtocol
 {
@@ -13,57 +13,105 @@ namespace ConnectionProtocol
     public abstract class Connection
     {
         /// <summary>
-        /// Потоковая передача данных
-        /// </summary>
-        public readonly Streaming Streaming;
-        /// <summary>
         /// Соединен ли сейчас с конечной точкой
         /// </summary>
-        public bool IsConnected
-        { get { return connection == null ? false : connection.Connected; } }
+        public bool Connected
+        {
+            get
+            {
+                try
+                { return connection.Connected; }
+                catch { return false; }
+            }
+        }
+
+        Queue<object> receivedObjects;
+        public Queue<object> ReceivedObjects
+        {
+            get
+            {
+                if (Opitions.EventOriented)
+                    throw new NotSupportedException("You can't use ReceivedObjects in event oriented connection");
+                else return receivedObjects;
+            }
+        }
 
         protected TcpClient connection;
         NetworkStream networkStream;
 
-        byte[] sendBuffer, receiveBuffer;
         Task send, receive;
 
-        /// <summary>
-        /// Принятые объекты
-        /// </summary>
-        public Queue<ConnectionContainer> Received { get; } = new Queue<ConnectionContainer>();
-        Queue<ConnectionContainer> sendObjects = new Queue<ConnectionContainer>();
+        Queue<Pair<Stream, StatusByte>> toSend = new Queue<Pair<Stream, StatusByte>>();
+        Stream receiver;
 
-        /// <param name="streamingSupported">Поддерживается ли потоковая передача</param>
-        public Connection(bool streamingSupported)
-        { if (streamingSupported) Streaming = new Streaming(this); }
+        public Connection(ConnectionOpitions opitions)
+        {
+            if ((Opitions = opitions) == null) throw new ArgumentNullException("Null opitions");
+            if (!Opitions.EventOriented)
+                receivedObjects = new Queue<object>();
+        }
 
-        /// <summary>
-        /// Отправить объект, обладающий аттрибутом Serializable
-        /// </summary>
-        /// <param name="obj">Объект, обладающий аттрибутом DataContract</param>
+        public ConnectionOpitions Opitions { get; }
+
+        public void Send(Stream stream, StreamInfo info)
+        {
+            if (stream == null) throw new ArgumentNullException("Null stream");
+            if (!stream.CanRead) throw new ArgumentException("Can't read stream");
+            if (info == null) throw new ArgumentNullException("Null stream info");
+            lock (toSend)
+            {
+                toSend.Enqueue(new Pair<Stream, StatusByte>(BinarySerializer.Serialize(info), StatusByte.streamInfo));
+                toSend.Enqueue(new Pair<Stream, StatusByte>(stream, StatusByte.data));
+            }
+            StartSend();
+        }
         public void Send(object obj)
         {
-            if (connection == null || !connection.Connected) throw new WebException();
+            if (obj == null) throw new ArgumentNullException("Null stream");
+
+            Stream s;
             try
             {
-                sendObjects.Enqueue(new ConnectionContainer(obj));
+                s = BinarySerializer.Serialize(obj);
             }
-            catch { throw; }
+            catch (NotSupportedException) { throw; }
 
-            StartSendStream();
+            toSend.Enqueue(new Pair<Stream, StatusByte>(s, obj is ConnectionOpitions ? StatusByte.connectionOpitions : (obj is StreamInfo ? StatusByte.streamInfo : StatusByte.data)));
+
+            StartSend();
         }
 
-        internal void StartSendStream()
+        public void Receive(Stream destination)
         {
-            if (send == null ||
-                send.Status == TaskStatus.RanToCompletion ||
-                send.Status == TaskStatus.Canceled ||
-                send.Status == TaskStatus.Faulted)
+            if (destination == null) throw new ArgumentNullException("Null destionation stream");
+            if (!destination.CanWrite) throw new ArgumentException("Can't write in destionation stream");
+            receiver = destination;
+        }
 
+        protected void OnConnect()
+        {
+            networkStream = connection.GetStream();
+
+            StartReceive();
+
+            if (Opitions.EventOriented && OnConnected != null)
+                OnConnected.Invoke(this);
+        }
+        public void Disconnect()
+        {
+            connection.Close();
+
+            if (Opitions.EventOriented && OnDisconnected != null)
+                OnDisconnected.Invoke(this);
+        }
+
+        #region Кишки
+        void StartSend()
+        {
+            if (send == null || send.Status == TaskStatus.RanToCompletion)
                 (send = new Task(new Action(Send))).Start();
         }
-        internal void StartReceiveStream()
+        void StartReceive()
         {
             if (receive == null ||
                 receive.Status == TaskStatus.RanToCompletion ||
@@ -73,187 +121,127 @@ namespace ConnectionProtocol
                 (receive = new Task(new Action(Receive))).Start();
         }
 
-        protected void OnConnect(int sendSize, int receiveSize)
-        {
-            networkStream = connection.GetStream();
-
-            sendBuffer = new byte[sendSize];
-            receiveBuffer = new byte[receiveSize];
-
-            (receive = new Task(new Action(Receive))).Start();
-
-            if (OnConnected != null)
-                OnConnected.Invoke(this, new EventArgs());
-        }
-
-        /// <summary>
-        /// Прервать соединение
-        /// </summary>
-        public void Disconnect()
-        {
-            sendObjects.Clear();
-            Received.Clear();
-
-            networkStream = null;
-            connection.Close();
-
-            if (OnDisconnected != null)
-                OnDisconnected.Invoke(this, null);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        #region Кишки
         void Receive()
         {
+            byte[] receiveBuffer = new byte[connection.ReceiveBufferSize = Opitions.BufferSize],
+                head = new byte[9];
+
+            int readed;
+            Stream destination = null;
+            bool stream = false;
+
             try
-
             {
-
                 while (connection.Connected)
                 {
-                    networkStream.Read(receiveBuffer, 0, 9);
-                    byte[] head = new byte[9];
-                    Array.Copy(receiveBuffer, head, 9);
-                    Heading(out bool isStream, out long lenght, head);
+                    networkStream.Read(head, 0, head.Length);
+                    Heading(out long size, out StatusByte statusByte, head);
 
-                    if (isStream)
+                    if (stream)
                     {
-                        //do
+                        if ((destination = receiver) == null)
+                            while (size > 0)
+                            {
+                                readed = networkStream.Read(receiveBuffer, 0, receiveBuffer.Length);
+                                size -= readed;
+                            }
                     }
+                    else destination = new MemoryStream();
+
+                    while (size > 0)
+                    {
+                        readed = networkStream.Read(receiveBuffer, 0, receiveBuffer.Length);
+                        destination.Write(receiveBuffer, 0, readed);
+                        size -= readed;
+                    }
+
+                    if (stream) stream = false;
                     else
                     {
-                        using (Stream obj = new MemoryStream())
+                        object obj = BinarySerializer.Deserialize(destination);
+                        switch (statusByte)
                         {
-                            while (lenght > 0)
-                            {
-                                int readed = networkStream.Read(receiveBuffer, 0, (receiveBuffer.Length > lenght ? (int)lenght : receiveBuffer.Length));
-
-                                obj.Write(receiveBuffer, 0, readed);
-
-                                lenght -= readed;
-                            }
-                            obj.Position = 0;
-                            ConnectionContainer container = ConnectionContainer.Deserialize(obj);
-
-                            Received.Enqueue(container);
-
-                            if (OnReceived != null)
-                                OnReceived.Invoke(this, null);
+                            case StatusByte.connectionOpitions:
+                                if (OnConnectionOpitionsReceived != null)
+                                    OnConnectionOpitionsReceived.BeginInvoke(this, obj as ConnectionOpitions, null, null);
+                                break;
+                            case StatusByte.streamInfo:
+                                if (!Opitions.EventOriented)
+                                    receivedObjects.Enqueue(obj);
+                                else if (OnIncomingStream != null)
+                                    OnIncomingStream.Invoke(this, obj as StreamInfo);
+                                stream = true;
+                                break;
+                            case StatusByte.data:
+                                if (!Opitions.EventOriented)
+                                    receivedObjects.Enqueue(obj);
+                                else if (OnObjectReceived != null)
+                                    OnObjectReceived.BeginInvoke(this, obj, null, null);
+                                break;
                         }
                     }
                 }
             }
             catch (IOException e) { if (e.InnerException is SocketException) Disconnect(); }
+            catch (System.Runtime.Serialization.SerializationException)
+            {
+                if (destination.Length == 0) Disconnect();
+            }
         }
 
         void Send()
         {
-            if (Streaming != null)
-                while (sendObjects.Count > 0 && Streaming.outcomingStreams.Count > 0)
+            byte[] sendBuffer = new byte[connection.SendBufferSize = Opitions.BufferSize];
+            try
+            {
+                while (toSend.Count > 0)
                 {
-                    //do
+                    var source = toSend.Peek();
+                    var head = Heading(source.Obj1.Length, source.Obj2);
+
+                    networkStream.Write(head, 0, head.Length);
+                    source.Obj1.Position = 0;
+
+                    while (source.Obj1.Position <= source.Obj1.Length - 1)
+                    {
+                        int readed = source.Obj1.Read(sendBuffer, 0, sendBuffer.Length);
+                        networkStream.Write(sendBuffer, 0, readed);
+                    }
+                    toSend.Dequeue();
                 }
-            else
-                while (sendObjects.Count > 0)
-                    SendObj(sendObjects.Dequeue());
+            }
+            catch (IOException e) { if (e.InnerException is SocketException) Disconnect(); }
         }
 
-        byte[] Heading(bool isStream, long size)
+        byte[] Heading(long size, StatusByte statusByte)
         {
             var arr = new byte[9];
-
             var s = BitConverter.GetBytes(size);
-            Array.Copy(s, 0, arr, 1, s.Length);
-
-            arr[0] = (isStream ? byte.MaxValue : byte.MinValue);
-
+            Array.Copy(s, arr, s.Length);
+            arr[8] = (byte)statusByte;
             return arr;
         }
-        void Heading(out bool isStream, out long size, byte[] heading)
+        void Heading(out long size, out StatusByte statusByte, byte[] heading)
         {
-            size = BitConverter.ToInt64(heading, 1);
-            isStream = (heading[0] == byte.MaxValue);
+            size = BitConverter.ToInt64(heading, 0);
+            statusByte = (StatusByte)heading[8];
         }
 
-        void SendObj(ConnectionContainer obj)
+        enum StatusByte
         {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                ConnectionContainer.Serialize(stream, obj);
-
-                var head = Heading(false, stream.Length);
-                networkStream.Write(head, 0, head.Length);
-
-                stream.Position = 0;
-                int readed = 0;
-
-                do
-                {
-                    readed = stream.Read(sendBuffer, 0, sendBuffer.Length);
-                    networkStream.Write(sendBuffer, 0, readed);
-                }
-                while (readed > 0);
-            }
+            streamInfo,
+            data,
+            connectionOpitions
         }
-
-        void SendStream(Stream stream, StreamInfo streamInfo)
-        {
-            var head = Heading(true, sendBuffer.Length);
-
-            SendObj(new ConnectionContainer(streamInfo));
-
-            networkStream.Write(head, 0, head.Length);
-
-            //do
-        }
-        #endregion кишки
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        #endregion
 
         #region IDisposable realization
         public void Dispose()
         {
             Dispose(true);
-
             GC.SuppressFinalize(this);
         }
+
         bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
@@ -264,12 +252,8 @@ namespace ConnectionProtocol
                 {
                     Disconnect();
 
-                    if (receive != null)
-                        receive.Dispose();
-                    if (send != null)
-                        send.Dispose();
-
-                    connection.Dispose();
+                    if (receive != null) receive.Dispose();
+                    if (send != null) send.Dispose();
 
                     if (networkStream != null)
                         networkStream.Dispose();
@@ -282,8 +266,12 @@ namespace ConnectionProtocol
         { Dispose(false); }
         #endregion
 
-        public event EventHandler OnConnected;
-        public event EventHandler OnDisconnected;
-        public event EventHandler OnReceived;
+        public event NonParametrizedEventHandler<Connection> OnConnected;
+        public event NonParametrizedEventHandler<Connection> OnDisconnected;
+
+        public event ParametrizedEventHandler<Connection, object> OnObjectReceived;
+        protected event ParametrizedEventHandler<Connection, ConnectionOpitions> OnConnectionOpitionsReceived;
+
+        public event ParametrizedEventHandler<Connection, StreamInfo> OnIncomingStream;
     }
 }
