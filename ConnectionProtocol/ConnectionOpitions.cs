@@ -34,7 +34,7 @@ namespace ConnectionProtocol
                     throw new ArgumentException("Too small packet size");
             }
         }
-
+        
         /// <summary>
         /// Время ожидания отправки пустой записи в молчащее подключение
         /// </summary>
@@ -52,6 +52,8 @@ namespace ConnectionProtocol
 
         internal void SetDisconnectAvait(TimeSpan maxDisconnectAvait, TimeSpan averageDisconnectAvait)
         {
+            if (maxDisconnectAvait < new TimeSpan(0, 0, 1) || averageDisconnectAvait < new TimeSpan(0, 0, 1))
+                throw new ArgumentException("Too small avait");
             MaxDisconnectAvait = maxDisconnectAvait;
             if ((AverageDisconnectAvait = averageDisconnectAvait) >= MaxDisconnectAvait) throw new ArgumentException("Average disconnect avait must be lower than max disconnect await");
         }

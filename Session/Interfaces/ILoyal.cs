@@ -1,6 +1,6 @@
 ﻿using AuxiliaryLibrary;
 
-namespace Session
+namespace CardCollectiveSession
 {
     /// <summary>
     /// Лояльность карты

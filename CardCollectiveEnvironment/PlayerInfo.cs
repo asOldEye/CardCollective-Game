@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Chat;
 
-namespace CardCollectiveEnvironment
+namespace CardCollectiveServerSide
 {
     [Serializable]
     public class PlayerInfo : IChatOwnerInfo

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Session
+namespace CardCollectiveSession
 {
     /// <summary>
     /// Квадрат карты

@@ -2,73 +2,47 @@
 using AuxiliaryLibrary;
 using System;
 using SimpleDatabase;
+using System.IO;
 
-namespace CardCollectiveEnvironment
+namespace CardCollectiveServerSide
 {
     public sealed class LoginningAPI : API
     {
         Database database;
-
-        protected override Dictionary<string, Action<APICommand>> ApiCommands
-        { get; set; }
 
         public LoginningAPI(Database database)
         {
             if ((this.database = database) == null)
                 throw new ArgumentNullException("Null database");
 
-            ApiCommands = new Dictionary<string, Action<APICommand>>
+            InitializeAPICommands(new Dictionary<string, Action<APICommand>>()
             {
-                { "Login", new Action<object>(Login) },
-                { "Register", new Action<object>(Register) }
-            };
+                {"Login", new Action<APICommand>(Login) },
+                {"Register", new Action<APICommand>(Register) }
+            });
+        }
+
+        protected void ContinueSession()
+        {
+            //TODO
+            //base.ContinueSession();
         }
 
         public override void OnDisconnected() { }
 
-        void Login(object command)
+        [APICommandAttr(new Type[] { typeof(LoginningForm) })]
+        void Login(APICommand command)
         {
-            LoginningForm f = LoginningForm(command);
-            if (f != null)
-            {
-                if (database.Exists(null, f.Login + "+" + f.Password))
-                {
-                    var obj = database.ReadObject(null, f.Login + "+" + f.Password);
-                    if (obj is PlayerInfo)
-                    {
-                        SendObject.Invoke(new APIAnswer(command as APICommand, obj as PlayerInfo));
-                        //TODO создать другой апи
-                    }
-                }
-                var objs = database.Find(null, f.Login + "+");
+            var form = (command.Params[0] as LoginningForm);
 
-                if (objs.Length == 0) WrongCommandAnswer(command, "Wrong login");
-                else
-                {
-                    foreach (var obj in objs)
-                    {
-
-                    }
-                }
-                WrongCommandAnswer(command, "Wrong login or password");
-            }
+            //database bla-bla-bla
         }
-        void Register(object command)
+        [APICommandAttr(new Type[] { typeof(LoginningForm) })]
+        void Register(APICommand command)
         {
-            LoginningForm f = LoginningForm(command);
-            if (f != null)
-            {
-                //TODO
-            }
-        }
+            var form = (command.Params[0] as LoginningForm);
 
-        LoginningForm LoginningForm(object command)
-        {
-            var f = (command as APICommand).Params;
-            if (f.Length == 1 && (f[0] is LoginningForm))
-                return ((command as APICommand).Params[0] as LoginningForm);
-            else WrongCommandAnswer(command as APICommand, "Wrong params count, must be one LoginningForm");
-            return null;
+            //database bla-bla-bla
         }
     }
 }

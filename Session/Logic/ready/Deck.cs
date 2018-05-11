@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Session
+namespace CardCollectiveSession
 {
     /// <summary>
     /// Колода карт

@@ -2,11 +2,11 @@
 using AuxiliaryLibrary;
 using Chat;
 
-namespace CardCollectiveEnvironment
+namespace CardCollectiveServerSide
 {
     public class Player : ChatOwner
     {
-        public List<Session.Session> Sessions { get; } = new List<Session.Session>();
+        public List<CardCollectiveSession.Session> Sessions { get; } = new List<CardCollectiveSession.Session>();
 
         public Player(PlayerInfo ownerInfo,
             ParametrizedEventHandler<Chat.Chat, Entry> onNewMessage,

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using AuxiliaryLibrary;
 
-namespace Session
+namespace CardCollectiveSession
 {
     public class SoliderClassesOpitions
     {

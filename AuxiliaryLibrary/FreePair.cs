@@ -13,7 +13,6 @@
         /// <param name="obj">Новый объект на замену</param>
         public void SetObj1(T1 obj)
         { Obj1 = obj; }
-
         /// <summary>
         /// Изменить второй объект
         /// </summary>

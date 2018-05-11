@@ -7,32 +7,31 @@ namespace SimpleDatabase
 {
     public class Database
     {
-        public string Folder { get; private set; }
-
         public string Name { get; private set; }
+        string folder;
 
         public Database(string name, string directory)
         {
             if (!Directory.Exists(directory)) throw new ArgumentException("Can't find directory");
 
-            Folder = directory + @"\" + name;
+            folder = directory + @"\" + name;
 
-            if (Directory.Exists(Folder))
+            if (Directory.Exists(folder))
             {
                 for (int i = 1; i < int.MaxValue; i++)
-                    if (!Directory.Exists(Folder + "_last" + i))
+                    if (!Directory.Exists(folder + "_last" + i))
                     {
-                        Directory.Move(Folder, Folder + "_last" + i);
+                        Directory.Move(folder, folder + "_last" + i);
                         break;
                     }
             }
-            else Directory.CreateDirectory(Folder);
+            else Directory.CreateDirectory(folder);
         }
 
         public Database(string directory)
         {
             if (!Directory.Exists(directory)) throw new ArgumentException("Can't find directory");
-            Folder = directory;
+            folder = directory;
         }
 
         public virtual void WriteObject(string category, string key, object obj)
@@ -45,8 +44,8 @@ namespace SimpleDatabase
                 if (e.Message == "Can't find file")
                 {
                     FileStream file = null;
-                    if (category == null) File.Create(Folder + @"\" + key + ".database");
-                    else File.Create(Folder + @"\" + category + @"\" + key + ".database");
+                    if (category == null) File.Create(folder + @"\" + key + ".database");
+                    else File.Create(folder + @"\" + category + @"\" + key + ".database");
                     try
                     { BinarySerializer.Serialize(obj, file); }
                     catch { throw; }
@@ -63,9 +62,9 @@ namespace SimpleDatabase
 
             FileStream fs;
             if (category == null)
-                fs = new FileStream(Folder + @"\" + key + ".database", FileMode.Open);
+                fs = new FileStream(folder + @"\" + key + ".database", FileMode.Open);
             else
-                fs = new FileStream(Folder + @"\" + category + @"\" + key + ".database", FileMode.Open);
+                fs = new FileStream(folder + @"\" + category + @"\" + key + ".database", FileMode.Open);
 
             try
             { return BinarySerializer.Deserialize(fs); }
@@ -73,16 +72,16 @@ namespace SimpleDatabase
         }
         public virtual string[] Find(string category, string keyPattern)
         {
-            Directory.GetFiles(Folder + @"\" + category + @"\" + keyPattern);
+            Directory.GetFiles(folder + @"\" + category + @"\" + keyPattern);
 
             string[] files;
             string name;
-            if (category == null) name = Folder + @"\";
+            if (category == null) name = folder + @"\";
             else
             {
-                if (!Directory.Exists(Folder + @"\" + category + @"\"))
+                if (!Directory.Exists(folder + @"\" + category + @"\"))
                     throw new ArgumentNullException("Category dsoes'nt exists");
-                name = Folder + @"\" + category;
+                name = folder + @"\" + category;
             }
             files = Directory.GetFiles(name, keyPattern);
 
@@ -102,30 +101,30 @@ namespace SimpleDatabase
             try
             {
                 if (category != null)
-                    BinarySerializer.Serialize(obj, new FileStream(Folder + @"\" + category + @"\" + key + ".database", FileMode.OpenOrCreate));
+                    BinarySerializer.Serialize(obj, new FileStream(folder + @"\" + category + @"\" + key + ".database", FileMode.OpenOrCreate));
                 else
-                    BinarySerializer.Serialize(obj, new FileStream(Folder + @"\" + key + ".database", FileMode.OpenOrCreate));
+                    BinarySerializer.Serialize(obj, new FileStream(folder + @"\" + key + ".database", FileMode.OpenOrCreate));
             }
             catch { throw; }
         }
         public virtual void CreateDirectory(string name)
         {
-            if (Directory.Exists(Folder + @"\" + name))
+            if (Directory.Exists(folder + @"\" + name))
                 throw new ArgumentException("Directory already exists");
-            Directory.CreateDirectory(Folder + @"\" + name);
+            Directory.CreateDirectory(folder + @"\" + name);
         }
         public virtual void DeleteObject(string category, string key)
         {
             try
             { IsExists(category, key); }
             catch { throw; }
-            if (category == null) File.Delete(Folder + @"\" + key + ".database");
-            else File.Delete(Folder + @"\" + category + @"\" + key + ".database");
+            if (category == null) File.Delete(folder + @"\" + key + ".database");
+            else File.Delete(folder + @"\" + category + @"\" + key + ".database");
         }
         public virtual void DeleteCategory(string name)
         {
-            if (!Directory.Exists(Folder + @"\" + name)) throw new ArgumentException("Can't find directory");
-            Directory.Delete(Folder + @"\" + name);
+            if (!Directory.Exists(folder + @"\" + name)) throw new ArgumentException("Can't find directory");
+            Directory.Delete(folder + @"\" + name);
         }
         public virtual bool Exists(string category, string key)
         {
@@ -138,7 +137,7 @@ namespace SimpleDatabase
             catch { throw; }
         }
         public virtual bool Exists(string category)
-        { return Directory.Exists(Folder + @"\" + category); }
+        { return Directory.Exists(folder + @"\" + category); }
 
         protected void IsExists(string category, string key)
         {
@@ -147,14 +146,14 @@ namespace SimpleDatabase
                 if (key == null) throw new ArgumentNullException("Null key");
 
                 if (category == null)
-                    if (!File.Exists(Folder + @"\" + key + ".database"))
+                    if (!File.Exists(folder + @"\" + key + ".database"))
                         throw new ArgumentException("Can't find file");
                     else
                     {
-                        if (!Directory.Exists(Folder + @"\" + category))
+                        if (!Directory.Exists(folder + @"\" + category))
                             throw new ArgumentException("Can't find category");
 
-                        if (File.Exists(Folder + @"\" + category + @"\" + key + ".database"))
+                        if (File.Exists(folder + @"\" + category + @"\" + key + ".database"))
                             throw new ArgumentException("Can't find file");
                     }
             }

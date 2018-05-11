@@ -1,7 +1,7 @@
 ﻿using System;
-using Session;
+using CardCollectiveSession;
 
-namespace CardCollectiveEnvironment
+namespace CardCollectiveServerSide
 {
     [Serializable]
     public class Card

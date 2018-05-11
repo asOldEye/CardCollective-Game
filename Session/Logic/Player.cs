@@ -1,7 +1,7 @@
 ﻿using AuxiliaryLibrary;
 using System;
 
-namespace Session
+namespace CardCollectiveSession
 {
     /// <summary>
     /// Реализация игрока

@@ -106,12 +106,7 @@ namespace ConnectionProtocol
                 }
                 else
                 {
-                    var connection = new ServerConnection(listener.AcceptTcpClient(), ConnectionOpitions);
-                    connection.OnDisconnected += OnDisconnected;
-                    Interlocked.Increment(ref connectionsCount);
-
-                    if (OnIncomingConnection != null)
-                        OnIncomingConnection.BeginInvoke(this, connection, null, null);
+                    OnConnected(new ServerConnection(listener.AcceptTcpClient(), ConnectionOpitions));
                 }
             }
         }
@@ -122,9 +117,24 @@ namespace ConnectionProtocol
         }
 
         void OnDisconnected(Connection connection)
-        { Interlocked.Decrement(ref connectionsCount); }
+        {
+            Interlocked.Decrement(ref connectionsCount);
+            if (OnConnectionsCountChanged != null)
+                OnConnectionsCountChanged.BeginInvoke(this, connectionsCount, null, null);
+        }
+        void OnConnected(ServerConnection connection)
+        {
+            connection.OnDisconnected += OnDisconnected;
+            Interlocked.Increment(ref connectionsCount);
+            if (OnIncomingConnection != null)
+                OnIncomingConnection.Invoke(this, connection);
+
+            if (OnConnectionsCountChanged != null)
+                OnConnectionsCountChanged.BeginInvoke(this, ConnectionsCount, null, null);
+        }
 
         public event ParametrizedEventHandler<ConnectionProvider, ServerConnection> OnIncomingConnection;
         public event NonParametrizedEventHandler<ConnectionProvider> OnMaxConnections;
+        public event ParametrizedEventHandler<ConnectionProvider, int> OnConnectionsCountChanged;
     }
 }

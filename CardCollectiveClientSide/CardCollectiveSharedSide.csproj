@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F1E298D3-A253-48F3-A2EA-5A8EF07DBB35}</ProjectGuid>
+    <ProjectGuid>{8E891F03-FF9A-4570-A007-176CF8B403A9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AuxiliaryLibrary</RootNamespace>
-    <AssemblyName>AuxiliaryLibrary</AssemblyName>
+    <RootNamespace>CardCollectiveClientSide</RootNamespace>
+    <AssemblyName>CardCollectiveClientSide</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,19 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API basis\APIAnswer.cs" />
-    <Compile Include="API basis\APICommand.cs" />
-    <Compile Include="API basis\APICommandAttr.cs" />
-    <Compile Include="BinarySerializer.cs" />
-    <Compile Include="DistributionRandom.cs" />
-    <Compile Include="API basis\API.cs" />
-    <Compile Include="Pair.cs" />
-    <Compile Include="Event handlers\EmptyEventHandler.cs" />
-    <Compile Include="Event handlers\NonParametizedEventHandler.cs" />
-    <Compile Include="Event handlers\ParametrizedEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FreePair.cs" />
-    <Compile Include="StreamInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

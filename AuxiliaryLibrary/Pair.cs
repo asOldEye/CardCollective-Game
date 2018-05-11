@@ -20,7 +20,6 @@ namespace AuxiliaryLibrary
         /// Первый объект пары
         /// </summary>
         public T1 Obj1 { get; protected set; }
-
         /// <summary>
         /// Второй объект пары
         /// </summary>

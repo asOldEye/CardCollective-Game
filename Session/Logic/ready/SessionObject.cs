@@ -1,6 +1,6 @@
 ﻿using AuxiliaryLibrary;
 
-namespace Session
+namespace CardCollectiveSession
 {
     /// <summary>
     /// Объект, находящийся в данной сессии

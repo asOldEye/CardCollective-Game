@@ -13,9 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuxiliaryLibrary", "Auxilia
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardCollectiveSession", "Session\CardCollectiveSession.csproj", "{ED28CC88-88A4-442D-9452-B6EE08BB4C11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardCollectiveEnvironment", "CardCollectiveEnvironment\CardCollectiveEnvironment.csproj", "{4C80AB28-601B-4003-9CF5-3AE666EC1DBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardCollectiveServerSide", "CardCollectiveEnvironment\CardCollectiveServerSide.csproj", "{4C80AB28-601B-4003-9CF5-3AE666EC1DBC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDatabase", "Database\SimpleDatabase.csproj", "{5D446A9A-24BC-487F-828C-C084E3F88BD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardCollectiveSharedSide", "CardCollectiveClientSide\CardCollectiveSharedSide.csproj", "{8E891F03-FF9A-4570-A007-176CF8B403A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{5D446A9A-24BC-487F-828C-C084E3F88BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D446A9A-24BC-487F-828C-C084E3F88BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D446A9A-24BC-487F-828C-C084E3F88BD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E891F03-FF9A-4570-A007-176CF8B403A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E891F03-FF9A-4570-A007-176CF8B403A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E891F03-FF9A-4570-A007-176CF8B403A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E891F03-FF9A-4570-A007-176CF8B403A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

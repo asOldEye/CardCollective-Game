@@ -54,9 +54,9 @@
       <Project>{f1e298d3-a253-48f3-a2ea-5a8ef07dbb35}</Project>
       <Name>AuxiliaryLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CardCollectiveEnvironment\CardCollectiveEnvironment.csproj">
+    <ProjectReference Include="..\CardCollectiveEnvironment\CardCollectiveServerSide.csproj">
       <Project>{4c80ab28-601b-4003-9cf5-3ae666ec1dbc}</Project>
-      <Name>CardCollectiveEnvironment</Name>
+      <Name>CardCollectiveServerSide</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chat\Chat.csproj">
       <Project>{b2f9d2ee-b83d-426a-ae69-6734e286d610}</Project>

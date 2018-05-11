@@ -1,7 +1,7 @@
 ﻿using AuxiliaryLibrary;
 using System;
 
-namespace Session
+namespace CardCollectiveSession
 {
     public abstract class PositionableSessionObject : SessionObject
     {

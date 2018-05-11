@@ -12,6 +12,32 @@ namespace ConnectionProtocol
     /// </summary>
     public abstract class Connection
     {
+        #region Timeout disconnection region
+        static List<Connection> connectionsToDisconnectAwait = new List<Connection>();
+        static Task disconnectAwaitHandler;
+
+        static void DisconnectAwait()
+        {
+            while (connectionsToDisconnectAwait.Count > 0)
+            {
+                var currTime = DateTime.Now;
+                lock (connectionsToDisconnectAwait)
+                    foreach (var f in connectionsToDisconnectAwait.ToArray())
+                        if (f != null)
+                        {
+                            if (currTime - f.Opitions.AverageDisconnectAvait >= f.lastSended)
+                                f.Send(StatusByte.timeoutCheck);
+                            if (currTime - f.Opitions.MaxDisconnectAvait > f.lastReceived || !f.connection.Connected)
+                                f.Disconnect();
+                        }
+                        else connectionsToDisconnectAwait.Remove(f);
+                Task.Delay(500).Wait();
+            }
+        }
+        #endregion
+
+        DateTime lastSended, lastReceived;
+
         /// <summary>
         /// Соединен ли сейчас с конечной точкой
         /// </summary>
@@ -44,15 +70,23 @@ namespace ConnectionProtocol
         Queue<Pair<Stream, StatusByte>> toSend = new Queue<Pair<Stream, StatusByte>>();
         Stream receiver;
 
-        public Connection(ConnectionOpitions opitions)
+        protected Connection(ConnectionOpitions opitions)
         {
             if ((Opitions = opitions) == null) throw new ArgumentNullException("Null opitions");
             if (!Opitions.EventOriented)
                 receivedObjects = new Queue<object>();
         }
 
+        /// <summary>
+        /// Настройки текущего соединения
+        /// </summary>
         public ConnectionOpitions Opitions { get; }
 
+        /// <summary>
+        /// Отправить поток
+        /// </summary>
+        /// <param name="stream">Отправляемый поток</param>
+        /// <param name="info">Информация о потоке</param>
         public void Send(Stream stream, StreamInfo info)
         {
             if (stream == null) throw new ArgumentNullException("Null stream");
@@ -65,9 +99,13 @@ namespace ConnectionProtocol
             }
             StartSend();
         }
+        /// <summary>
+        /// Отправить объект, помеченный аттрибутом [Serializable]
+        /// </summary>
+        /// <param name="obj"></param>
         public void Send(object obj)
         {
-            if (obj == null) throw new ArgumentNullException("Null stream");
+            if (obj == null) throw new ArgumentNullException("Null object");
 
             Stream s;
             try
@@ -76,11 +114,17 @@ namespace ConnectionProtocol
             }
             catch (NotSupportedException) { throw; }
 
-            toSend.Enqueue(new Pair<Stream, StatusByte>(s, obj is ConnectionOpitions ? StatusByte.connectionOpitions : (obj is StreamInfo ? StatusByte.streamInfo : StatusByte.data)));
+            StatusByte statusByte = obj is ConnectionOpitions ? StatusByte.connectionOpitions :
+                (obj is StreamInfo ? StatusByte.streamInfo :
+                obj is StatusByte ? StatusByte.timeoutCheck : StatusByte.data);
 
+            toSend.Enqueue(new Pair<Stream, StatusByte>(s, statusByte));
             StartSend();
         }
-
+        /// <summary>
+        /// Указать поток, в который будет писаться входящий поток
+        /// </summary>
+        /// <param name="destination"></param>
         public void Receive(Stream destination)
         {
             if (destination == null) throw new ArgumentNullException("Null destionation stream");
@@ -92,17 +136,32 @@ namespace ConnectionProtocol
         {
             networkStream = connection.GetStream();
 
+            lock (connectionsToDisconnectAwait)
+                connectionsToDisconnectAwait.Add(this);
+            if (disconnectAwaitHandler == null || disconnectAwaitHandler.IsCompleted)
+                (disconnectAwaitHandler = new Task(new Action(DisconnectAwait))).Start();
+            lastSended = lastReceived = DateTime.Now;
+
             StartReceive();
 
             if (Opitions.EventOriented && OnConnected != null)
                 OnConnected.Invoke(this);
         }
+        /// <summary>
+        /// Отключиться от конечной точки
+        /// </summary>
         public void Disconnect()
         {
-            connection.Close();
+            bool disconnect;
+            lock (connectionsToDisconnectAwait)
+                disconnect = connectionsToDisconnectAwait.Remove(this);
 
-            if (Opitions.EventOriented && OnDisconnected != null)
-                OnDisconnected.Invoke(this);
+            if (disconnect)
+                if (Opitions.EventOriented && OnDisconnected != null)
+                    OnDisconnected.Invoke(this);
+
+            if (connection != null && connection.Connected)
+                connection.Close();
         }
 
         #region Кишки
@@ -135,6 +194,7 @@ namespace ConnectionProtocol
                 while (connection.Connected)
                 {
                     networkStream.Read(head, 0, head.Length);
+                    lastReceived = DateTime.Now;
                     Heading(out long size, out StatusByte statusByte, head);
 
                     if (stream)
@@ -142,8 +202,8 @@ namespace ConnectionProtocol
                         if ((destination = receiver) == null)
                             while (size > 0)
                             {
-                                readed = networkStream.Read(receiveBuffer, 0, receiveBuffer.Length);
-                                size -= readed;
+                                size -= networkStream.Read(receiveBuffer, 0, receiveBuffer.Length);
+                                lastReceived = DateTime.Now;
                             }
                     }
                     else destination = new MemoryStream();
@@ -151,6 +211,7 @@ namespace ConnectionProtocol
                     while (size > 0)
                     {
                         readed = networkStream.Read(receiveBuffer, 0, receiveBuffer.Length);
+                        lastReceived = DateTime.Now;
                         destination.Write(receiveBuffer, 0, readed);
                         size -= readed;
                     }
@@ -187,8 +248,8 @@ namespace ConnectionProtocol
             {
                 if (destination.Length == 0) Disconnect();
             }
+            Disconnect();
         }
-
         void Send()
         {
             byte[] sendBuffer = new byte[connection.SendBufferSize = Opitions.BufferSize];
@@ -200,12 +261,15 @@ namespace ConnectionProtocol
                     var head = Heading(source.Obj1.Length, source.Obj2);
 
                     networkStream.Write(head, 0, head.Length);
+                    lastSended = DateTime.Now;
+
                     source.Obj1.Position = 0;
 
                     while (source.Obj1.Position <= source.Obj1.Length - 1)
                     {
                         int readed = source.Obj1.Read(sendBuffer, 0, sendBuffer.Length);
                         networkStream.Write(sendBuffer, 0, readed);
+                        lastSended = DateTime.Now;
                     }
                     toSend.Dequeue();
                 }
@@ -227,11 +291,13 @@ namespace ConnectionProtocol
             statusByte = (StatusByte)heading[8];
         }
 
+        [Serializable]
         enum StatusByte
         {
             streamInfo,
             data,
-            connectionOpitions
+            connectionOpitions,
+            timeoutCheck
         }
         #endregion
 
@@ -271,7 +337,6 @@ namespace ConnectionProtocol
 
         public event ParametrizedEventHandler<Connection, object> OnObjectReceived;
         protected event ParametrizedEventHandler<Connection, ConnectionOpitions> OnConnectionOpitionsReceived;
-
         public event ParametrizedEventHandler<Connection, StreamInfo> OnIncomingStream;
     }
 }

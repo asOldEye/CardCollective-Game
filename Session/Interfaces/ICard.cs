@@ -1,4 +1,4 @@
-﻿namespace Session
+﻿namespace CardCollectiveSession
 {
     public interface ICard
     {

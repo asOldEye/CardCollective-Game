@@ -1,7 +1,7 @@
 ﻿using AuxiliaryLibrary;
 using System.Collections.Generic;
 
-namespace Session
+namespace CardCollectiveSession
 {
     public interface IModified
     {

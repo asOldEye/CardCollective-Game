@@ -26,11 +26,16 @@ namespace ConnectionProtocol
             OnConnectionOpitionsReceived += ConnectionOpitionsReceived;
             OnConnect();
         }
-
+        /// <summary>
+        /// Установить соединение с конечной точкой
+        /// </summary>
+        /// <param name="address">Адрес конечной точки</param>
+        /// <param name="port">Порт конечной точки</param>
+        /// <returns></returns>
         public void Connect(string address, int port)
         {
             try
-            { connection.Connect(address, port); }
+            { connection = new TcpClient(address, port); }
             catch { throw; }
             OnConnectionOpitionsReceived += ConnectionOpitionsReceived;
             OnConnect();

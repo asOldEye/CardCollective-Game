@@ -1,7 +1,7 @@
 ﻿using AuxiliaryLibrary;
 using System.Collections.Generic;
 
-namespace Session
+namespace CardCollectiveSession
 {
     /// <summary>
     /// Даёт возможность расположить объект на игровом поле

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using ConnectionProtocol;
 using AuxiliaryLibrary;
 using System.IO;
-using CardCollectiveEnvironment;
+using CardCollectiveServerSide;
 using SimpleDatabase;
 
 namespace Server
@@ -23,6 +23,7 @@ namespace Server
             var connectionOpitions = new ConnectionOpitions(true, new TimeSpan(0, 0, 10), new TimeSpan(0, 0, 15));
             provider = new ConnectionProvider(IPAddress.Any, 8888, 10, connectionOpitions);
             provider.OnMaxConnections += OnMaxConnections;
+            provider.OnConnectionsCountChanged += ReDrawUI;
             provider.OnIncomingConnection += OnIncomingConnection;
             provider.AllowNewConnections = true;
 
@@ -74,12 +75,11 @@ namespace Server
             //Console.WriteLine("Server stopped");
             Console.ReadLine();
         }
-        
+
         static void OnIncomingConnection(ConnectionProvider provider, ServerConnection connection)
         {
             if (connection != null)
-                new Seance<LoginningAPI>(connection, new LoginningAPI(database));
-            ReDrawUI();
+                new Seance(connection, new LoginningAPI(database));
         }
         static void OnMaxConnections(ConnectionProvider provider)
         {
@@ -90,9 +90,9 @@ namespace Server
                 provider.MaxConnections = provider.MaxConnections / 100 * 110;
         }
 
-        static void ReDrawUI()
+        static void ReDrawUI(ConnectionProvider provider, int count)
         {
-            Console.WriteLine("connections count ~[" + provider.ConnectionsCount + "]/[" + provider.MaxConnections + "]");
+            Console.WriteLine("Connections count: [" + count + "]/[" + provider.MaxConnections + "]");
         }
     }
 }

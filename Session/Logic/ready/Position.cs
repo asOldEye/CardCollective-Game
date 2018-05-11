@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Session
+namespace CardCollectiveSession
 {
     /// <summary>
     /// Позиция объекта на игровом поле

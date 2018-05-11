@@ -23,7 +23,7 @@ namespace AuxiliaryLibrary
             return stream;
         }
         /// <summary>
-        /// Сериализовать объект
+        /// Сериализовать объект в заданный поток
         /// </summary>
         /// <param name="obj">Сериализуемый объект</param>
         /// <returns>Поток, в котором находится сериализованный объект</returns>
@@ -36,7 +36,6 @@ namespace AuxiliaryLibrary
             }
             catch { throw; }
         }
-
         /// <summary>
         /// Десериализовать объект
         /// </summary>
@@ -50,20 +49,6 @@ namespace AuxiliaryLibrary
                 return formatter.Deserialize(stream);
             }
             catch { throw; }
-        }
-        /// <summary>
-        /// Попытаться сериализовать объект
-        /// </summary>
-        /// <param name="obj">Сериализуемый объект</param>
-        /// <returns>Получилось ли сериализовать</returns>
-        public static bool TrySerialize(object obj)
-        {
-            try
-            {
-                formatter.Serialize(new MemoryStream(), obj);
-                return true;
-            }
-            catch { return false; }
         }
     }
 }
