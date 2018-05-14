@@ -10,8 +10,7 @@ namespace AuxiliaryLibrary
     {
         public APIAnswer(APICommand command, object answer, Exception exception = null)
         {
-            if ((Command = command) == null) throw new ArgumentNullException("Null command");
-            if ((Answer = answer) == null) throw new ArgumentNullException("Null answer");
+            if ((Command = command) == null) throw new ArgumentNullException(nameof(command));
             Exception = exception;
         }
 

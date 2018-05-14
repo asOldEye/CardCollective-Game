@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CardCollectiveServerSide
+namespace CardCollectiveSharedSide
 {
     [Serializable]
     public class LoginningForm
@@ -21,7 +21,7 @@ namespace CardCollectiveServerSide
             get { return login; }
             set
             {
-                if (value == null) throw new ArgumentNullException("Null login");
+                if (value == null) throw new ArgumentNullException(nameof(Login));
                 if ((login = value) == String.Empty) throw new ArgumentException("Empty login");
             }
         }
@@ -30,7 +30,7 @@ namespace CardCollectiveServerSide
             get { return password; }
             set
             {
-                if (value == null) throw new ArgumentNullException("Null password");
+                if (value == null) throw new ArgumentNullException(nameof(Password));
                 if ((password = value) == String.Empty) throw new ArgumentException("Empty password");
             }
         }

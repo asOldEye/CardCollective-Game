@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Session</RootNamespace>
-    <AssemblyName>Session</AssemblyName>
+    <AssemblyName>CardCollectiveSession</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,28 +40,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\ICard.cs" />
-    <Compile Include="Logic\ready\SoliderClassesOpitions.cs" />
-    <Compile Include="Logic\CasterSoliderCard.cs" />
-    <Compile Include="Logic\DurableModifier.cs" />
-    <Compile Include="Logic\Modifier.cs" />
-    <Compile Include="Logic\Player.cs" />
-    <Compile Include="Logic\ready\Position.cs" />
-    <Compile Include="Logic\ready\SessionObject.cs" />
-    <Compile Include="Logic\ready\SoliderCard.cs" />
-    <Compile Include="Logic\ready\SpellCard.cs" />
-    <Compile Include="Interfaces\IAttacker.cs" />
-    <Compile Include="Interfaces\ICaster.cs" />
-    <Compile Include="Interfaces\IDestroyable.cs" />
-    <Compile Include="Interfaces\ILoyal.cs" />
-    <Compile Include="Interfaces\IModified.cs" />
-    <Compile Include="Interfaces\IMovable.cs" />
-    <Compile Include="Logic\ready\Deck.cs" />
-    <Compile Include="Logic\ready\MapSquare.cs" />
-    <Compile Include="Logic\Map.cs" />
-    <Compile Include="Logic\ready\PositionedSessionObject.cs" />
-    <Compile Include="Session.cs" />
+    <Compile Include="Components\Attacker.cs" />
+    <Compile Include="Components\Cost.cs" />
+    <Compile Include="Components\Destroyable.cs" />
+    <Compile Include="Components\Mana.cs" />
+    <Compile Include="Components\Positionable.cs" />
+    <Compile Include="Components\SoliderCaster.cs" />
+    <Compile Include="Components\Spell.cs" />
+    <Compile Include="Components\SpellCaster.cs" />
+    <Compile Include="Components\Walkable.cs" />
+    <Compile Include="MainLogic\Controller.cs" />
+    <Compile Include="MainLogic\ready\Attributes.cs" />
+    <Compile Include="MainLogic\ready\Component.cs" />
+    <Compile Include="MainLogic\ready\Container.cs" />
+    <Compile Include="MainLogic\ready\DurableModifier.cs" />
+    <Compile Include="MainLogic\ready\Map.cs" />
+    <Compile Include="MainLogic\ready\MapSquare.cs" />
+    <Compile Include="MainLogic\ready\Modifier.cs" />
+    <Compile Include="MainLogic\ready\Position.cs" />
+    <Compile Include="MainLogic\Session.cs" />
+    <Compile Include="MainLogic\SessionChange.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SessionObjects\Card.cs" />
+    <Compile Include="SessionObjects\CasterSoliderCard.cs" />
+    <Compile Include="SessionObjects\Player.cs" />
+    <Compile Include="SessionObjects\SoliderCard.cs" />
+    <Compile Include="SessionObjects\SpellCard.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AuxiliaryLibrary\AuxiliaryLibrary.csproj">

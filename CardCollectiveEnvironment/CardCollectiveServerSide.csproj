@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CardCollectiveEnvironment</RootNamespace>
-    <AssemblyName>CardCollectiveEnvironment</AssemblyName>
+    <AssemblyName>CardCollectiveServerSide</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,18 +40,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Card.cs" />
     <Compile Include="InGameAPI.cs" />
     <Compile Include="Loginning\LoginningAPI.cs" />
-    <Compile Include="Loginning\LoginningForm.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Supervisor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AuxiliaryLibrary\AuxiliaryLibrary.csproj">
       <Project>{f1e298d3-a253-48f3-a2ea-5a8ef07dbb35}</Project>
       <Name>AuxiliaryLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CardCollectiveClientSide\CardCollectiveSharedSide.csproj">
+      <Project>{8e891f03-ff9a-4570-a007-176cf8b403a9}</Project>
+      <Name>CardCollectiveSharedSide</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chat\Chat.csproj">
       <Project>{b2f9d2ee-b83d-426a-ae69-6734e286d610}</Project>

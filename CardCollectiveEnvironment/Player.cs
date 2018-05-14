@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
 using AuxiliaryLibrary;
 using Chat;
+using System;
 
 namespace CardCollectiveServerSide
 {
+    [Serializable]
     public class Player : ChatOwner
     {
+        public PlayerInfo PlayerInfo { get; }
         public List<CardCollectiveSession.Session> Sessions { get; } = new List<CardCollectiveSession.Session>();
 
-        public Player(PlayerInfo ownerInfo,
-            ParametrizedEventHandler<Chat.Chat, Entry> onNewMessage,
-            ParametrizedEventHandler<Chat.Chat, IChatOwnerInfo> onOwnerJoined,
-            ParametrizedEventHandler<Chat.Chat, IChatOwnerInfo> onOwnerLeft)
-            : base(ownerInfo, onNewMessage, onOwnerJoined, onOwnerLeft)
+        public Player(PlayerInfo ownerInfo) : base(ownerInfo.SharedPlayerInfo)
         {
-
+            if (ownerInfo == null) throw new ArgumentNullException(nameof(ownerInfo));
         }
     }
 }

@@ -23,7 +23,7 @@ namespace ConnectionProtocol
             set
             {
                 if ((connectionOpitions = value) == null)
-                    throw new ArgumentNullException("Null connection opitions");
+                    throw new ArgumentNullException(nameof(value));
             }
         }
 

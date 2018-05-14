@@ -20,8 +20,8 @@ namespace AuxiliaryLibrary
         /// <param name="param">Параметры, передаваемые на сервер</param>
         public APICommand(string command, object[] param)
         {
-            if ((Command = command) == null) throw new ArgumentNullException("Null command");
-            if ((Params = param) == null) throw new ArgumentNullException("Null command");
+            if ((Command = command) == null) throw new ArgumentNullException(nameof(command));
+            if ((Params = param) == null) throw new ArgumentNullException(nameof(param));
         }
     }
 }

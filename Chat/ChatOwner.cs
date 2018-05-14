@@ -19,19 +19,12 @@ namespace Chat
         /// </summary>
         public List<Chat> Chats { get; } = new List<Chat>();
 
-        ParametrizedEventHandler<Chat, Entry> onNewMessage;
-        ParametrizedEventHandler<Chat, IChatOwnerInfo> onOwnerJoined, onOwnerLeft;
+        public ParametrizedEventHandler<Chat, Entry> OnNewMessage;
+        public ParametrizedEventHandler<Chat, IChatOwnerInfo> OnOwnerJoined, OnOwnerLeft;
 
-        public ChatOwner(IChatOwnerInfo ownerInfo,
-            ParametrizedEventHandler<Chat, Entry> onNewMessage,
-            ParametrizedEventHandler<Chat, IChatOwnerInfo> onOwnerJoined,
-            ParametrizedEventHandler<Chat, IChatOwnerInfo> onOwnerLeft)
+        public ChatOwner(IChatOwnerInfo ownerInfo)
         {
-            if ((Info = ownerInfo) == null) throw new ArgumentNullException("Null chat owner info");
-
-            this.onNewMessage = onNewMessage;
-            this.onOwnerJoined = onOwnerJoined;
-            this.onOwnerLeft = onOwnerLeft;
+            if ((Info = ownerInfo) == null) throw new ArgumentNullException(nameof(ownerInfo));
         }
 
         /// <summary>
@@ -40,14 +33,14 @@ namespace Chat
         /// <param name="chat">Чат</param>
         public void JoinChat(Chat chat)
         {
-            if (chat == null) throw new ArgumentNullException("Null chat");
+            if (chat == null) throw new ArgumentNullException(nameof(chat));
             if (Chats.Contains(chat)) throw new ArgumentException("Already in this chat");
             Chats.Add(chat);
             chat.AddOwner(Info);
 
-            chat.OnNewMessage += onNewMessage;
-            chat.OnOwnerJoined += onOwnerJoined;
-            chat.OnOwnerLeft += onOwnerLeft;
+            chat.OnNewMessage += OnNewMessage;
+            chat.OnOwnerJoined += OnOwnerJoined;
+            chat.OnOwnerLeft += OnOwnerLeft;
         }
         /// <summary>
         /// Покинуть чат
@@ -55,13 +48,13 @@ namespace Chat
         /// <param name="chat">Чат</param>
         public void LeftChat(Chat chat)
         {
-            if (chat == null) throw new ArgumentNullException("Null chat");
+            if (chat == null) throw new ArgumentNullException(nameof(chat));
             if (!Chats.Remove(chat)) throw new ArgumentException("Not in this chat");
             chat.DelOwner(Info);
 
-            chat.OnNewMessage -= onNewMessage;
-            chat.OnOwnerJoined -= onOwnerJoined;
-            chat.OnOwnerLeft -= onOwnerLeft;
+            chat.OnNewMessage -= OnNewMessage;
+            chat.OnOwnerJoined -= OnOwnerJoined;
+            chat.OnOwnerLeft -= OnOwnerLeft;
         }
         /// <summary>
         /// Написать запись в чат
@@ -70,8 +63,8 @@ namespace Chat
         /// <param name="message">Сообщение</param>
         public void WriteEntry(Chat chat, string message)
         {
-            if (chat == null) throw new ArgumentNullException("Null chat");
-            if (message == null) throw new ArgumentNullException("Null entry");
+            if (chat == null) throw new ArgumentNullException(nameof(chat));
+            if (message == null) throw new ArgumentNullException(nameof(message));
             if (!Chats.Contains(chat)) throw new ArgumentException("Not my chat");
             chat.WriteMessage(new Entry(Info, message, DateTime.UtcNow));
         }

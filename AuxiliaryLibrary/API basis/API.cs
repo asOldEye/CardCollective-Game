@@ -39,13 +39,20 @@ namespace AuxiliaryLibrary
 
         void Perform(APICommand command)
         {
-            if (command == null) throw new ArgumentNullException("Null command");
+            if (command == null) throw new ArgumentNullException(nameof(command));
             if (apiCommands.TryGetValue(command.Command, out Action<APICommand> method))
             {
+                Task t;
                 var prms = command.Params;
                 var attrPrms = (method.Method.GetCustomAttributes(typeof(APICommandAttr), true)[0] as APICommandAttr).InputParams;
+                if (prms.Length != attrPrms.Length)
+                {
+                    SendObject(new APIAnswer(command, null,
+                new NotImplementedException("Current API command, named " + command.Command + " must have " + attrPrms.Length + " parameters")));
+                    return;
+                }
                 for (int i = 0; i < prms.Length; i++)
-                    if (prms[i].GetType() != attrPrms.GetType())
+                    if (prms[i].GetType() != attrPrms[i])
                     {
                         string msg = "Current API command, named " + command.Command + " must have " + attrPrms.Length + " parameters of type: ";
                         foreach (var f in attrPrms) msg += "[" + f.GetType() + "]";
@@ -53,7 +60,7 @@ namespace AuxiliaryLibrary
                 new NotImplementedException("Current API command, named " + command.Command + " must have " + attrPrms.Length + " parameters")));
                         return;
                     }
-                Task t = Task.Run(() => method(command));
+                t = Task.Run(() => method(command));
             }
             else SendObject(new APIAnswer(command, null,
                 new NotImplementedException("Current API haven't command, named " + command.Command)));
@@ -125,13 +132,13 @@ namespace AuxiliaryLibrary
 
         protected void SendObject(object obj)
         {
-            if (obj == null) throw new ArgumentNullException("Null stream");
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
             sendObject.Invoke(obj);
         }
         protected void SendStream(Stream obj, StreamInfo info)
         {
-            if (obj == null) throw new ArgumentNullException("Null stream");
-            if (info == null) throw new ArgumentNullException("Null stream info");
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            if (info == null) throw new ArgumentNullException(nameof(info));
             sendStream.Invoke(obj, info);
         }
 

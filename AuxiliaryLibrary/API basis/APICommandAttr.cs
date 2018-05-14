@@ -10,7 +10,9 @@ namespace AuxiliaryLibrary
     {
         /// <param name="inputParams">Параметры, которые должны быть реализованы во входящем запросе</param>
         public APICommandAttr(Type[] inputParams = null)
-        { InputParams = inputParams; }
+        {
+            if ((InputParams = inputParams) == null) InputParams = new Type[] { };
+        }
         /// <summary>
         /// Параметры, которые должны быть реализованы во входящем запросе и их порядок
         /// </summary>

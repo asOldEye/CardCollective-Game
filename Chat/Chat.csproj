@@ -44,7 +44,6 @@
     <Compile Include="ChatOwner.cs" />
     <Compile Include="Entry.cs" />
     <Compile Include="IChatOwnerInfo.cs" />
-    <Compile Include="LongChat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

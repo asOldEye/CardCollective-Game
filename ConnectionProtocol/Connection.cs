@@ -72,7 +72,7 @@ namespace ConnectionProtocol
 
         protected Connection(ConnectionOpitions opitions)
         {
-            if ((Opitions = opitions) == null) throw new ArgumentNullException("Null opitions");
+            if ((Opitions = opitions) == null) throw new ArgumentNullException(nameof(opitions));
             if (!Opitions.EventOriented)
                 receivedObjects = new Queue<object>();
         }
@@ -89,9 +89,9 @@ namespace ConnectionProtocol
         /// <param name="info">Информация о потоке</param>
         public void Send(Stream stream, StreamInfo info)
         {
-            if (stream == null) throw new ArgumentNullException("Null stream");
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
             if (!stream.CanRead) throw new ArgumentException("Can't read stream");
-            if (info == null) throw new ArgumentNullException("Null stream info");
+            if (info == null) throw new ArgumentNullException(nameof(info));
             lock (toSend)
             {
                 toSend.Enqueue(new Pair<Stream, StatusByte>(BinarySerializer.Serialize(info), StatusByte.streamInfo));
@@ -105,7 +105,7 @@ namespace ConnectionProtocol
         /// <param name="obj"></param>
         public void Send(object obj)
         {
-            if (obj == null) throw new ArgumentNullException("Null object");
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
 
             Stream s;
             try
@@ -127,7 +127,7 @@ namespace ConnectionProtocol
         /// <param name="destination"></param>
         public void Receive(Stream destination)
         {
-            if (destination == null) throw new ArgumentNullException("Null destionation stream");
+            if (destination == null) throw new ArgumentNullException(nameof(destination));
             if (!destination.CanWrite) throw new ArgumentException("Can't write in destionation stream");
             receiver = destination;
         }

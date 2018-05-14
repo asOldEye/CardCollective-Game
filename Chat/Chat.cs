@@ -23,7 +23,7 @@ namespace Chat
 
         internal void WriteMessage(Entry entry)
         {
-            if (entry == null) throw new ArgumentNullException("Null message");
+            if (entry == null) throw new ArgumentNullException(nameof(entry));
             Messages.Add(entry);
             if (OnNewMessage != null)
                 OnNewMessage.Invoke(this, entry);
@@ -31,7 +31,7 @@ namespace Chat
 
         public void AddOwner(IChatOwnerInfo owner)
         {
-            if (owner == null) throw new ArgumentNullException("Null owner");
+            if (owner == null) throw new ArgumentNullException(nameof(owner));
             if (owners.Contains(owner)) throw new ArgumentException("This owner already owner");
 
             owners.Add(owner);
@@ -41,7 +41,7 @@ namespace Chat
         }
         public void DelOwner(IChatOwnerInfo owner)
         {
-            if (owner == null) throw new ArgumentNullException("Null owner");
+            if (owner == null) throw new ArgumentNullException(nameof(owner));
             if (!owners.Remove(owner)) throw new ArgumentException("Not my owner");
             if (OnOwnerLeft != null)
                 OnOwnerLeft.Invoke(this, owner);

@@ -9,7 +9,7 @@ namespace Server
         API api;
         public Seance(Connection connection, API api)
         {
-            this.api = api ?? throw new ArgumentNullException("Null API");
+            this.api = api ?? throw new ArgumentNullException(nameof(api));
 
             api.sendObject = connection.Send;
             api.sendStream = connection.Send;

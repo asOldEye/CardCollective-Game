@@ -12,7 +12,7 @@ namespace ConnectionProtocol
         /// <param name="opitions">Настройки подключения</param>
         public ServerConnection(TcpClient client, ConnectionOpitions opitions) : base(opitions)
         {
-            if ((connection = client) == null) throw new ArgumentNullException("Null client");
+            if ((connection = client) == null) throw new ArgumentNullException(nameof(client));
             OnConnect();
             Send(opitions);
         }
