@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27428.2011
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionProtocol", "ConnectionProtocol\ConnectionProtocol.csproj", "{BDB0CAF0-7180-4416-A1B5-2200B598C5DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{E1FF91FC-A182-4B35-87AB-79267E2D62AF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat", "Chat\Chat.csproj", "{B2F9D2EE-B83D-426A-AE69-6734E286D610}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuxiliaryLibrary", "AuxiliaryLibrary\AuxiliaryLibrary.csproj", "{F1E298D3-A253-48F3-A2EA-5A8EF07DBB35}"
@@ -19,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDatabase", "Database\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardCollectiveSharedSide", "CardCollectiveClientSide\CardCollectiveSharedSide.csproj", "{8E891F03-FF9A-4570-A007-176CF8B403A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "..\CardCollective-game_repos — копия\Server\Server.csproj", "{E1FF91FC-A182-4B35-87AB-79267E2D62AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +29,6 @@ Global
 		{BDB0CAF0-7180-4416-A1B5-2200B598C5DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDB0CAF0-7180-4416-A1B5-2200B598C5DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDB0CAF0-7180-4416-A1B5-2200B598C5DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E1FF91FC-A182-4B35-87AB-79267E2D62AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E1FF91FC-A182-4B35-87AB-79267E2D62AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E1FF91FC-A182-4B35-87AB-79267E2D62AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E1FF91FC-A182-4B35-87AB-79267E2D62AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B2F9D2EE-B83D-426A-AE69-6734E286D610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B2F9D2EE-B83D-426A-AE69-6734E286D610}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2F9D2EE-B83D-426A-AE69-6734E286D610}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,6 +53,10 @@ Global
 		{8E891F03-FF9A-4570-A007-176CF8B403A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E891F03-FF9A-4570-A007-176CF8B403A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E891F03-FF9A-4570-A007-176CF8B403A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1FF91FC-A182-4B35-87AB-79267E2D62AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1FF91FC-A182-4B35-87AB-79267E2D62AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1FF91FC-A182-4B35-87AB-79267E2D62AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1FF91FC-A182-4B35-87AB-79267E2D62AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
